@@ -25,12 +25,14 @@ public class Climber extends Subsystem {
 		outputToSmartDashboard();
 	}
 	
-	public void setSpeed(double speed){
-		mClimberTalon.set(speed);
-		System.out.println(speed);
+	public void setSpeed(double speed) {
+		if (speed > 0) {
+			mClimberTalon.set(speed);
+			System.out.println(speed);
+		}
 	}
 	
-	public void stop(){
+	public void stop() {
 		setSpeed(0);
 	}
 	//
