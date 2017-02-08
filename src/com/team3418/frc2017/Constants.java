@@ -3,7 +3,21 @@ package com.team3418.frc2017;
 public class Constants {
 	public static double kConstantVariableExample = 10.0;
 	
-	//TALONS
+	//PWM
+	public static int kLeftFrontMotorId = 0;
+	public static int kLeftRearMotorId = 1;
+	public static int lRightFrontMotorId = 2;
+	public static int kFrontRearMotorId = 3;
+	
+	//CAN
+	public static int kLeftShooterMotorId = 0;
+	public static int kRightShooterMotorId = 1;
 	
 	//SOLENOIDS
+	public static int kLeftShifterSolenoidId = 0;
+	public static int lRightShifterSolenoidId = 1;
+	
+	
+	
+	
 }
