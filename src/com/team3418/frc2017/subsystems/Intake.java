@@ -1,7 +1,7 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class Intake extends Subsystem
 {
@@ -11,10 +11,10 @@ public class Intake extends Subsystem
         return mInstance;
     }
     
-	private Talon mIntakeSpinner = new Talon(Constants.kIntakeSpinnerId);
+	private VictorSP  mIntakeRoller;
     
 	Intake() {
-		//initialize hardware settings
+		mIntakeRoller = new VictorSP(Constants.kIntakeRollerId);
 		System.out.println("Intake Initialized");
 	}
     
@@ -63,12 +63,11 @@ public class Intake extends Subsystem
 	
 
 	private void setRollerSpeed(double speed) {
-		mIntakeSpinner.set(speed);
+		mIntakeRoller.set(speed);
 	}
 
 	@Override
 	public void outputToSmartDashboard() {
-		// TODO Auto-generated method stub
-		
+		mIntakeRoller.getSpeed();
 	}
 }

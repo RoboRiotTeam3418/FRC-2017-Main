@@ -8,6 +8,8 @@ public class Constants {
 	public static int kLeftRearMotorId = 1;
 	public static int lRightFrontMotorId = 2;
 	public static int kFrontRearMotorId = 3;
+	public static int kIntakeRollerId = 4;
+	public static int kClimberId = 5;
 	
 	//CAN
 	public static int kLeftShooterMotorId = 0;
@@ -21,7 +23,4 @@ public class Constants {
 	public static double kRollerReverseSpeed = .75;
     public static double kRollerIntakeSpeed = -.75;
     
-	//TALONS
-    
-	//SOLENOIDS
 }
