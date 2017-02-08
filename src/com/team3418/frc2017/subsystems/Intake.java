@@ -11,7 +11,7 @@ public class Intake extends Subsystem
         return mInstance;
     }
     
-	private Talon mIntakeSpinner = new Talon(Constants.kIntakeSpinnerID); //CHANGE TALON ID
+	private Talon mIntakeSpinner = new Talon(Constants.kIntakeSpinnerID);
     
 	Intake() {
 		//initialize hardware settings
@@ -31,14 +31,14 @@ public class Intake extends Subsystem
 	}
 	
 	@Override
-	public void updateSubsystemState()
+	public void updateSubsystem()
 	{
 		switch(mIntakeRollerState) {
 		case ROLLER_IN:
-			setRollerSpeed(Constants.kRollerIntakeSpeed); //CHANGE INTAKE CONSTANT
+			setRollerSpeed(Constants.kRollerIntakeSpeed);
 			break;
 		case ROLLER_OUT:
-			setRollerSpeed(Constants.kRollerReverseSpeed); //CHANGE REVERSE INTAKE CONSTANT
+			setRollerSpeed(Constants.kRollerReverseSpeed);
 			break;
 		case ROLLER_STOP:
 			setRollerSpeed(0);
@@ -71,5 +71,4 @@ public class Intake extends Subsystem
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
