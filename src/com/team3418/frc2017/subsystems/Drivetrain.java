@@ -17,7 +17,7 @@ public class Drivetrain extends Subsystem {
     Solenoid mRightSolenoid;
     RobotDrive mDrive;
 	
-    Drivetrain(){
+    public Drivetrain(){
     	mLeftSolenoid = new Solenoid(Constants.kLeftShifterSolenoidId);
     	mRightSolenoid = new Solenoid(Constants.kRightShifterSolenoidId);
     	mDrive = new RobotDrive(Constants.kLeftFrontMotorId, Constants.kLeftRearMotorId, Constants.kRightFrontMotorId, Constants.kRightRearMotorId);

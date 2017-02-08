@@ -13,7 +13,7 @@ public class Intake extends Subsystem
     
 	private VictorSP  mIntakeRoller;
     
-	Intake() {
+	public Intake() {
 		mIntakeRoller = new VictorSP(Constants.kIntakeRollerId);
 		System.out.println("Intake Initialized");
 	}
