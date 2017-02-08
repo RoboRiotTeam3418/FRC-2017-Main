@@ -1,8 +1,6 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-import com.team3418.frc2017.subsystems.Drivetrain.DriveGear;
-
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
