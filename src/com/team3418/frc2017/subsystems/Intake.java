@@ -11,7 +11,7 @@ public class Intake extends Subsystem
         return mInstance;
     }
     
-	private Talon mIntakeSpinner = new Talon(Constants.kIntakeSpinnerID);
+	private Talon mIntakeSpinner = new Talon(Constants.kIntakeSpinnerId);
     
 	Intake() {
 		//initialize hardware settings

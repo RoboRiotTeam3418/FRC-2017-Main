@@ -12,6 +12,7 @@ public class Constants {
 	//CAN
 	public static int kLeftShooterMotorId = 0;
 	public static int kRightShooterMotorId = 1;
+	public static final int kIntakeSpinnerId = 2;
 	
 	//SOLENOIDS
 	public static int kLeftShifterSolenoidId = 0;
@@ -21,7 +22,6 @@ public class Constants {
     public static double kRollerIntakeSpeed = -.75;
     
 	//TALONS
-    public static final int kIntakeSpinnerID = 2;
     
 	//SOLENOIDS
 }
