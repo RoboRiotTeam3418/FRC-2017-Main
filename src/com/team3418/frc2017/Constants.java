@@ -43,6 +43,7 @@ public class Constants {
 	public static int kLeftShooterMotorId = 0;
 	public static int kRightShooterMotorId = 1;
 	public static int kIntakeSpinnerId = 2;
+	public static int kAgitatorId = 3; //CHANGE!!!!!!!!!!
 	
 	//SOLENOIDS
 	public static int kLeftShifterSolenoidId = 0;

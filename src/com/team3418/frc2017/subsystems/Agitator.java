@@ -1,5 +1,9 @@
 package com.team3418.frc2017.subsystems;
 
+import com.team3418.frc2017.Constants;
+
+import edu.wpi.first.wpilibj.VictorSP;
+
 public class Agitator extends Subsystem {
 	
 	public Agitator mInstance = new Agitator();
@@ -8,20 +12,62 @@ public class Agitator extends Subsystem {
 		return mInstance;
 	}
 	
+	private VictorSP  mAgitator;
+	
 	public Agitator() {
-		
+		mAgitator = new VictorSP(Constants.kAgitatorId);
+		System.out.println("Agitator Initialized");
+	}
+	
+	public enum AgitatorState {
+    	AGITATOR_CLOCKWISE,
+    	AGITATOR_COUNTERCLOCKWISE,
+    	AGITATOR_STOP
+    }
+	
+	private AgitatorState mAgitatorState;
+	
+	public AgitatorState getAgitatorState() {
+		return mAgitatorState;
 	}
 
 	@Override
-	void updateSubsystem() {
-		// TODO Auto-generated method stub
-		
+	public void updateSubsystem() {
+		switch(mAgitatorState) {
+		case AGITATOR_CLOCKWISE:
+			setMotorSpeed(Constants.kRollerIntakeSpeed);
+			break;
+		case AGITATOR_COUNTERCLOCKWISE:
+			setMotorSpeed(Constants.kRollerReverseSpeed);
+			break;
+		case AGITATOR_STOP:
+			setMotorSpeed(0);
+			break;
+		default:
+			mAgitatorState = AgitatorState.AGITATOR_STOP;
+			break;
+		}
+	}
+	
+	public void clockwiseAgitator(){
+		mAgitatorState = AgitatorState.AGITATOR_CLOCKWISE;
+	}
+	
+	public void counterclockwiseAgitator(){
+		mAgitatorState = AgitatorState.AGITATOR_COUNTERCLOCKWISE;
+	}
+	
+	public void stopAgitator(){
+		mAgitatorState = AgitatorState.AGITATOR_STOP;
+	}
+	
+
+	private void setMotorSpeed(double speed) {
+		mAgitator.set(speed);
 	}
 
 	@Override
-	void outputToSmartDashboard() {
-		// TODO Auto-generated method stub
-		
+	public void outputToSmartDashboard() {
+		mAgitator.getSpeed();
 	}
-
 }
