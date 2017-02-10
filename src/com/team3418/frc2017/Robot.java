@@ -52,7 +52,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		
+		stopAllSubsystems();
+		updateAllSubsystems();
 	}
 	
 	@Override
@@ -62,7 +63,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit(){
-		
+		stopAllSubsystems();
+		updateAllSubsystems();
 	}
 	
 	@Override
@@ -72,7 +74,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopInit(){
-		
+		stopAllSubsystems();
+		updateAllSubsystems();
 	}
 	
 	@Override
@@ -89,7 +92,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void testInit(){
-		
+		stopAllSubsystems();
+		updateAllSubsystems();
 	}
 	
 	@Override

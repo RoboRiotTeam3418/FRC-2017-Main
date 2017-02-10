@@ -2,6 +2,7 @@ package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem
 {
@@ -68,6 +69,6 @@ public class Intake extends Subsystem
 
 	@Override
 	public void outputToSmartDashboard() {
-		mIntake.getSpeed();
+		SmartDashboard.putNumber("Intake_Speed", mIntake.getSpeed());
 	}
 }

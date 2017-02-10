@@ -41,7 +41,7 @@ public class Climber extends Subsystem {
 
 	@Override
 	public void outputToSmartDashboard() {
-		SmartDashboard.putNumber("Climber_Power_Percent", mClimberTalon.getSpeed());
+		SmartDashboard.putNumber("Climber_Speed", mClimberTalon.getSpeed());
 	}
 
 }
