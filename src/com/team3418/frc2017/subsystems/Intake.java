@@ -57,7 +57,7 @@ public class Intake extends Subsystem
 		mIntakeRollerState = IntakeRollerState.ROLLER_OUT;
 	}
 	
-	public void intakeRoller(){
+	public void intakeStop(){
 		mIntakeRollerState = IntakeRollerState.ROLLER_STOP;
 	}
 	
