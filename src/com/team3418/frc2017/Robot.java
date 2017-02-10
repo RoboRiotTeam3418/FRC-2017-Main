@@ -5,6 +5,7 @@ import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
+import com.team3418.frc2017.subsystems.Drivetrain.DriveGear;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,7 +21,6 @@ public class Robot extends IterativeRobot {
 	
 	//other parts of the robot
 	ControlBoard mControlBoard;
-	
 	
 	
 	
@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 		mShooter.stopFeeder();
 	}
 	
-	@Override
+	
 	public void robotInit() {
 		mAgitator = new Agitator();
 		mClimber = new Climber();
@@ -58,8 +58,28 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousPeriodic() {
+		//All of this is still being tested, do not play with it unless you know what you're doing
+		//Uncomment below to test the drive foreward function
+		//driveForwardAuto();
+		//austin is a dinugs
+		
+		
 		
 	}
+		
+		public void driveForwardAuto(){
+			System.out.println("Oh geeze here we go!");
+			mDrivetrain.LowGear();
+			for(int x = 0; x != 1000; x++){
+			mDrivetrain.setTankDriveSpeed(.1,.1);
+			}
+			System.out.println("I'M FINISHED!");
+			System.out.println("I'M FINISHED!");
+		}
+		
+		
+		
+		
 	
 	@Override
 	public void disabledInit(){
