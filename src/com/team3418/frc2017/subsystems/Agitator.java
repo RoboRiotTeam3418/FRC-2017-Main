@@ -35,10 +35,10 @@ public class Agitator extends Subsystem {
 	public void updateSubsystem() {
 		switch(mAgitatorState) {
 		case AGITATOR_CLOCKWISE:
-			setMotorSpeed(Constants.kRollerIntakeSpeed);
+			setMotorSpeed(Constants.kAgitatorSpeed);
 			break;
 		case AGITATOR_COUNTERCLOCKWISE:
-			setMotorSpeed(Constants.kRollerReverseSpeed);
+			setMotorSpeed(Constants.kAgitatorReverseSpeed);
 			break;
 		case AGITATOR_STOP:
 			setMotorSpeed(0);

@@ -51,4 +51,6 @@ public class Constants {
 	
 	public static double kRollerReverseSpeed = .75;
     public static double kRollerIntakeSpeed = -.75;
+    public static double kAgitatorSpeed = .75;
+    public static double kAgitatorReverseSpeed = -.75;
 }
