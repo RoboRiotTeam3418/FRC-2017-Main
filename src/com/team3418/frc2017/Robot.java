@@ -25,11 +25,18 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void updateAllSubsystems(){
-		
+		mAgitator.updateSubsystem();
+		mClimber.updateSubsystem();
+		mDrivetrain.updateSubsystem();
+		mIntake.updateSubsystem();
+		mShooter.updateSubsystem();
 	}
 	
 	public void stopAllSubsystems(){
-		
+		mAgitator.stopAgitator();
+		mClimber.stop();
+		mDrivetrain.setTankDriveSpeed(0, 0);
+		mIntake.stopIntakeRoller();
 	}
 	
 	@Override
