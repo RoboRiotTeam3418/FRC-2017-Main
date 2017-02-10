@@ -163,6 +163,9 @@ public class Shooter extends Subsystem {
 		case FEEDING:
 			setFeederRpm(mTargetFeederRpm);
 			break;
+		default:
+			stopFeeder();
+			break;
 		}
 		
 		switch(mShooterState){
@@ -172,6 +175,9 @@ public class Shooter extends Subsystem {
 			break;
 		case SHOOTING:
 			setShooterRpm(mTargetShooterRpm);
+		default:
+			stopShooter();
+			break;
 		}
 		
 		//printShooterInfo();
@@ -182,6 +188,22 @@ public class Shooter extends Subsystem {
 		} else {
 			mShooterReadyState = ShooterReadyState.NOT_READY;
 		}
+	}
+	
+	public void shoot(){
+		mShooterState = ShooterState.SHOOTING;
+	}
+	
+	public void stopShooter(){
+		mShooterState = ShooterState.STOPPED;
+	}
+	
+	public void feed(){
+		mFeederState = FeederState.FEEDING;
+	}
+	
+	public void stopFeeder(){
+		mFeederState = FeederState.STOPPED;
 	}
 	
 	
@@ -243,15 +265,6 @@ public class Shooter extends Subsystem {
 		mFeederTalon.set(speed);
 	}
 	
-	
-	public void stopShooter(){
-		setLeftShooterOpenLoop(0);
-		setRightShooterOpenLoop(0);
-	}
-	
-	public void stopFeeder(){
-		setFeederOpenLoop(0);
-	}
 	//
 	
 	//set shooter ready state
