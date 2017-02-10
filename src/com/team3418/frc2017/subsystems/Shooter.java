@@ -92,7 +92,7 @@ public class Shooter extends Subsystem {
 		mTargetFeederRpm = 0;
 		//
 		System.out.println("rightshooterdone init");
-		System.out.println("shooter dne initializing");
+		System.out.println("shooter done initializing");
 		}
     
     public enum ShooterReadyState {
