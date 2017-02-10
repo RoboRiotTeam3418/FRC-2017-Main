@@ -11,10 +11,10 @@ public class Intake extends Subsystem
         return mInstance;
     }
     
-	private VictorSP  mIntakeRoller;
+	private VictorSP  mIntake;
     
 	public Intake() {
-		mIntakeRoller = new VictorSP(Constants.kIntakeRollerId);
+		mIntake = new VictorSP(Constants.kIntakeRollerId);
 		System.out.println("Intake Initialized");
 	}
     
@@ -63,11 +63,11 @@ public class Intake extends Subsystem
 	
 
 	private void setRollerSpeed(double speed) {
-		mIntakeRoller.set(speed);
+		mIntake.set(speed);
 	}
 
 	@Override
 	public void outputToSmartDashboard() {
-		mIntakeRoller.getSpeed();
+		mIntake.getSpeed();
 	}
 }
