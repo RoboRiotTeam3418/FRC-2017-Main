@@ -5,6 +5,4 @@ abstract public class Subsystem {
 	abstract void updateSubsystem();
 	
 	abstract void outputToSmartDashboard();
-
-	abstract void stop();
 }
