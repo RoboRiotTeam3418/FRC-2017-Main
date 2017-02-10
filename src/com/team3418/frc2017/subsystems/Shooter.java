@@ -98,6 +98,14 @@ public class Shooter extends Subsystem {
     public enum ShooterReadyState {
     	READY, NOT_READY
     }
+    
+    public enum FeederState {
+    	FEEDING, STOPPED
+    }
+    
+    public enum ShooterState {
+    	SHOOTING, STOPPED
+    }
 
     
     //
@@ -127,9 +135,15 @@ public class Shooter extends Subsystem {
     
     //
     private ShooterReadyState mShooterReadyState;
+    private ShooterState mShooterState;
+    private FeederState mFeederState;
     
-    public ShooterReadyState getShooterState(){
-    	return mShooterReadyState;
+    public ShooterState getShooterState(){
+    	return mShooterState;
+    }
+    
+    public FeederState getFeederState(){
+    	return mFeederState;
     }
     
     public ShooterReadyState getShooterReadyState(){
@@ -141,6 +155,24 @@ public class Shooter extends Subsystem {
     
 	@Override
 	public void updateSubsystem() {
+		
+		switch(mFeederState){
+		case STOPPED:
+			setFeederOpenLoop(0);
+			break;
+		case FEEDING:
+			setFeederRpm(mTargetFeederRpm);
+			break;
+		}
+		
+		switch(mShooterState){
+		case STOPPED:
+			setLeftShooterOpenLoop(0);
+			setRightShooterOpenLoop(0);
+			break;
+		case SHOOTING:
+			setShooterRpm(mTargetShooterRpm);
+		}
 		
 		//printShooterInfo();
 		outputToSmartDashboard();
