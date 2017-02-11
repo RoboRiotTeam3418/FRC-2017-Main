@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 		mShooter.stopFeeder();
 	}
 	
-	
+	@Override
 	public void robotInit() {
 		mAgitator = new Agitator();
 		mClimber = new Climber();
