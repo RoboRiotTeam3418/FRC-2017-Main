@@ -7,7 +7,14 @@ import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 import com.team3418.frc2017.subsystems.Drivetrain.DriveGear;
 
+import edu.wpi.first.wpilibj.ADXL345_I2C;
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,6 +28,9 @@ public class Robot extends IterativeRobot {
 	
 	//other parts of the robot
 	ControlBoard mControlBoard;
+	Accelerometer mAccelerometer;
+	AnalogGyro mAnalogGyro;
+	//I2C mI2c;
 	
 	
 	
@@ -48,6 +58,10 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = new Drivetrain();
 		mIntake = new Intake();
 		mShooter = new Shooter();
+		
+		mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
+		mAnalogGyro = new AnalogGyro(0);
+		//mI2c = new I2C(Port.kOnboard,84);
 	}
 	
 	@Override
