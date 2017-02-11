@@ -117,42 +117,51 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		
 		
-		//  Drive train 
-		if(mControlBoard.getDriverHighGearButton() == true || mControlBoard.getSecondaryHighGearButton())
-		{
-			mDrivetrain.setDriveGear(DriveGear.HIGH);
-		}
-		if(mControlBoard.getDriverLowGearButton() == true || mControlBoard.getSecondaryLowGearButton())
-		{
-			mDrivetrain.setDriveGear(DriveGear.LOW);
-		}
 		
-		mDrivetrain.setTankDriveSpeed(mControlBoard.getDriverLeftY(), mControlBoard.getDriverRightY());
-		//---------------------------------------------------
 		//intake
-		
-		if(mControlBoard.getSecondaryIntakeButton()==true )
-		{
+		if(mControlBoard.getSecondaryIntakeButton()) {
 			mIntake.intakeIn();
+		} else {
+			mIntake.stopIntakeRoller();
 		}
-		else{mIntake.stopIntakeRoller();}
 		//---------------------------------------------------------------
 		
 		//climber
 		mClimber.setSpeed(mControlBoard.getClimberAxis());
 		//-----------------------------------------------------------------
 		
-	if(mShooter.getShooterReadyState() == ShooterReadyState.READY)
-	{ mAgitator.clockwiseAgitator();
-	
-	}else{mAgitator.stopAgitator();}
-	
+		
+		//shooter
+		if (mControlBoard.getSecondaryShootButton()){
+			mShooter.StartShooting();
+		} else {
+			mShooter.stopShooter();
+		}
+		//---------------------------------------------------------------
+
 		
 		
 		
 		
-		
-		
+		//agitator
+		if(mShooter.isShooterReady()) {
+			mAgitator.clockwiseAgitator();
+			mShooter.startFeeder();
+		} else {
+			mAgitator.stopAgitator();
+			mShooter.stopFeeder();
+		}
+		//---------------------------------------------------------------
+
+		//  Drive train 
+		if(mControlBoard.getDriverHighGearButton()|| mControlBoard.getSecondaryHighGearButton()) {
+			mDrivetrain.HighGear();
+		}
+		if(mControlBoard.getDriverLowGearButton()|| mControlBoard.getSecondaryLowGearButton()) {
+			mDrivetrain.LowGear();
+		}
+		mDrivetrain.setTankDriveSpeed(mControlBoard.getDriverLeftY(), mControlBoard.getDriverRightY());
+		//---------------------------------------------------
 		
 		
 	}

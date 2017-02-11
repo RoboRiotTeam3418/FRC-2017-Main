@@ -37,7 +37,7 @@ public class Drivetrain extends Subsystem {
     	return mDriveGear;
     }
     
-    public void setDriveGear(DriveGear driveGear){
+    private void setDriveGearState(DriveGear driveGear){
     	mDriveGear = driveGear;
     }
 	
