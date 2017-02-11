@@ -48,7 +48,6 @@ public class Robot extends IterativeRobot {
 		mDrivetrain.setTankDriveSpeed(0, 0);
 		mIntake.stopIntakeRoller();
 		mShooter.stopFeeder();
-		mShooter.stopFeeder();
 	}
 	
 	@Override
