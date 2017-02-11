@@ -36,10 +36,6 @@ public class Drivetrain extends Subsystem {
     public DriveGear getDriveGear(){
     	return mDriveGear;
     }
-    
-    private void setDriveGearState(DriveGear driveGear){
-    	mDriveGear = driveGear;
-    }
 	
     public void setTankDriveSpeed(double left, double right){
     	mLeftSpeed = left;
@@ -53,38 +49,21 @@ public class Drivetrain extends Subsystem {
     	mDrive.arcadeDrive(move, rotate);
     }
     
-    private void setLowGear(){
+    public void setLowGear(){
+    	mDriveGear = DriveGear.LOW;
     	mLeftSolenoid.set(true);
     	mRightSolenoid.set(true);
     }
 	
-    private void setHighGear(){
+    public void setHighGear(){
+    	mDriveGear = DriveGear.HIGH;
     	mLeftSolenoid.set(false);
     	mRightSolenoid.set(false);
-    }
-    
-    public void HighGear(){
-    	mDriveGear = DriveGear.HIGH;
-    }
-    
-    public void LowGear(){
-    	mDriveGear = DriveGear.LOW;
     }
 	
 	@Override
 	public void updateSubsystem() {
 		
-		switch(mDriveGear){
-		case HIGH:
-			setHighGear();
-			break;
-		case LOW:
-			setLowGear();
-			break;
-		default:
-			setHighGear();
-			break;
-		}
 	}
 
 	@Override

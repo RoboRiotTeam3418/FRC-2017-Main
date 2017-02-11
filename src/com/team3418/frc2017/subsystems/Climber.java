@@ -26,10 +26,7 @@ public class Climber extends Subsystem {
 	}
 	
 	public void setSpeed(double speed) {
-		if (speed > 0) {
-			mClimberTalon.set(speed);
-			System.out.println(speed);
-		}
+		mClimberTalon.set(speed);
 	}
 	
 	public void stop() {

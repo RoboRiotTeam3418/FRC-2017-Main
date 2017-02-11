@@ -2,7 +2,7 @@ package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Agitator extends Subsystem {
@@ -13,10 +13,10 @@ public class Agitator extends Subsystem {
 		return mInstance;
 	}
 	
-	private VictorSP  mAgitator;
+	private Talon  mAgitator;
 	
 	public Agitator() {
-		mAgitator = new VictorSP(Constants.kAgitatorId);
+		mAgitator = new Talon(Constants.kAgitatorId);
 		System.out.println("Agitator Initialized");
 	}
 	

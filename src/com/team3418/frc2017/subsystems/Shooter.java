@@ -5,28 +5,29 @@ import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 import com.team3418.frc2017.Constants;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends Subsystem {
 
 	
 	static Shooter mInstance = new Shooter();
-
+	
     public static Shooter getInstance() {
         return mInstance;
     }
     
     CANTalon mLeftShooterTalon;
 	CANTalon mRightShooterTalon;
-	VictorSP mFeederVictor;
+	Talon mFeederVictor;
     
     public Shooter() {
     	//initialize shooter hardware settings
 		System.out.println("Shooter Initialized");
 		
 		//Feeder Talon motor controller
-		mFeederVictor = new VictorSP(Constants.kFeederId);
+		mFeederVictor = new Talon(Constants.kFeederId);
+		mFeederVictor.setInverted(true);
 		/*
 		mFeederTalon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		mFeederTalon.changeControlMode(TalonControlMode.PercentVbus);
@@ -56,14 +57,14 @@ public class Shooter extends Subsystem {
                 Constants.kFlywheelIZone, Constants.kFlywheelRampRate, 0);
 		mLeftShooterTalon.setProfile(0);
 		mLeftShooterTalon.reverseSensor(false);
-		mLeftShooterTalon.reverseOutput(true);
+		mLeftShooterTalon.reverseOutput(false);
 		
 		mLeftShooterTalon.setVoltageRampRate(0);
 		mLeftShooterTalon.enableBrakeMode(false);
 		mLeftShooterTalon.clearStickyFaults();
 		
 		mLeftShooterTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-		mLeftShooterTalon.configPeakOutputVoltage(+0.0f, -12.0f);
+		mLeftShooterTalon.configPeakOutputVoltage(+12.0f, -0.0f);
 		mLeftShooterTalon.setAllowableClosedLoopErr(Constants.kFlywheelAllowableError);		
 		//
 		System.out.println("leftshooterdoneinit");
@@ -84,11 +85,11 @@ public class Shooter extends Subsystem {
 		mRightShooterTalon.clearStickyFaults();
 		
 		mRightShooterTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-		mRightShooterTalon.configPeakOutputVoltage(+0.0f, -12.0f);
+		mRightShooterTalon.configPeakOutputVoltage(+.0f, -12.0f);
 		mRightShooterTalon.setAllowableClosedLoopErr(Constants.kFlywheelAllowableError);		
 		
-		mTargetShooterRpm = 0;
-		mTargetFeederSpeed = 0;
+		mTargetShooterRpm = 1500;
+		mTargetFeederSpeed = .50;
 		//
 		System.out.println("rightshooterdone init");
 		System.out.println("shooter done initializing");
@@ -110,9 +111,6 @@ public class Shooter extends Subsystem {
     //
     private double mTargetFeederSpeed;
     private double mTargetShooterRpm;
-    
-    
-    
     
     public void setTargetShooterRpm(double rpm){
     	mTargetShooterRpm = rpm;
@@ -163,30 +161,6 @@ public class Shooter extends Subsystem {
 	@Override
 	public void updateSubsystem() {
 		
-		switch(mFeederState){
-		case STOPPED:
-			setFeederOpenLoop(0);
-			break;
-		case FEEDING:
-			setFeederOpenLoop(mTargetFeederSpeed);
-			break;
-		default:
-			stopFeeder();
-			break;
-		}
-		
-		switch(mShooterState){
-		case STOPPED:
-			setLeftShooterOpenLoop(0);
-			setRightShooterOpenLoop(0);
-			break;
-		case SHOOTING:
-			setShooterRpm(mTargetShooterRpm);
-		default:
-			stopShooter();
-			break;
-		}
-		
 		//printShooterInfo();
 		outputToSmartDashboard();
 		
@@ -197,21 +171,6 @@ public class Shooter extends Subsystem {
 		}
 	}
 	
-	public void StartShooting(){
-		mShooterState = ShooterState.SHOOTING;
-	}
-	
-	public void stopShooter(){
-		mShooterState = ShooterState.STOPPED;
-	}
-	
-	public void startFeeder(){
-		mFeederState = FeederState.FEEDING;
-	}
-	
-	public void stopFeeder(){
-		mFeederState = FeederState.STOPPED;
-	}
 	
 	
 	
@@ -294,6 +253,8 @@ public class Shooter extends Subsystem {
 	@Override
 	public void outputToSmartDashboard() {
         SmartDashboard.putBoolean("Flywheel_On_Target", bothIsOnTarget());
+        SmartDashboard.putBoolean("Flywheel_On_Target_Left", leftIsOnTarget());
+        SmartDashboard.putBoolean("Flywheel_On_Target_Right", RightIsOnTarget());
         
 		SmartDashboard.putNumber("Left_Flywheel_rpm", getLeftRpm());
 		SmartDashboard.putNumber("Right_Flywheel_rpm", getRightRpm());

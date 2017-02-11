@@ -20,8 +20,7 @@ public class ControlBoard {
     	mSecondaryDriverStick = new Joystick(1);
     }
     
-    //DRIVER CONTROLS
-    
+    //DRIVER CONTROLS / SECONDARY CONTROLS
     public double getDriverLeftX(){
     	return mDriverStick.getRawAxis(0);
     }
@@ -53,7 +52,6 @@ public class ControlBoard {
     public boolean getSecondaryLowGearButton(){
     	return mSecondaryDriverStick.getRawButton(6);
     }
-    
     
     public double getClimberAxis(){
     	return mDriverStick.getRawAxis(2) + -mDriverStick.getRawAxis(3);

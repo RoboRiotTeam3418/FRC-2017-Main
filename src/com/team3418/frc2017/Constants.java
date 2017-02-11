@@ -35,10 +35,11 @@ public class Constants {
 	public static int kLeftRearMotorId = 1;
 	public static int kRightFrontMotorId = 2;
 	public static int kRightRearMotorId = 3;
+	
 	public static int kIntakeRollerId = 4;
 	public static int kClimberId = 5;
 	public static int kFeederId = 6;
-	public static int kAgitatorId = 3; //CHANGE!!!!!!!!!!
+	public static int kAgitatorId = 7;
 
 	//CAN
 	public static int kLeftShooterMotorId = 0;
@@ -48,8 +49,8 @@ public class Constants {
 	public static int kLeftShifterSolenoidId = 0;
 	public static int kRightShifterSolenoidId = 1;
 	
-	public static double kRollerReverseSpeed = .75;
-    public static double kRollerIntakeSpeed = -.75;
-    public static double kAgitatorSpeed = .75;
-    public static double kAgitatorReverseSpeed = -.75;
+    public static double kRollerIntakeSpeed = -.25;
+	public static double kRollerReverseSpeed = .25;
+    public static double kAgitatorSpeed = -.75;
+    public static double kAgitatorReverseSpeed = .75;
 }
