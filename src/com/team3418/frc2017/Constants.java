@@ -38,7 +38,7 @@ public class Constants {
 	public static int kIntakeRollerId = 4;
 	public static int kClimberId = 5;
 	public static int kFeederId = 6;
-	public static int kAgitatorId = 3; //CHANGE!!!!!!!!!!
+	public static int kAgitatorId = 7; //CHANGE!!!!!!!!!!
 
 	//CAN
 	public static int kLeftShooterMotorId = 0;
