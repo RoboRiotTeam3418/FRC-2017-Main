@@ -46,6 +46,15 @@ public class ControlBoard {
     	return mDriverStick.getRawButton(6);
     }
     
+    public boolean getSecondaryHighGearButton(){
+    	return mSecondaryDriverStick.getRawButton(5);
+    }
+    
+    public boolean getSecondaryLowGearButton(){
+    	return mSecondaryDriverStick.getRawButton(6);
+    }
+    
+    
     public double getClimberAxis(){
     	return mDriverStick.getRawAxis(2) + -mDriverStick.getRawAxis(3);
     }

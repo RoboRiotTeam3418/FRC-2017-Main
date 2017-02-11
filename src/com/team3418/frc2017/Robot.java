@@ -3,9 +3,11 @@ package com.team3418.frc2017;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
+import com.team3418.frc2017.subsystems.Drivetrain.DriveGear;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 import com.team3418.frc2017.subsystems.Drivetrain.DriveGear;
+import com.team3418.frc2017.subsystems.Shooter.ShooterReadyState;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -101,7 +103,39 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
+		
+		//  Drive train 
+		if(mControlBoard.getDriverHighGearButton() == true || mControlBoard.getSecondaryHighGearButton())
+		{
+			mDrivetrain.setDriveGear(DriveGear.HIGH);
+		}
+		if(mControlBoard.getDriverLowGearButton() == true || mControlBoard.getSecondaryLowGearButton())
+		{
+			mDrivetrain.setDriveGear(DriveGear.LOW);
+		}
+		
 		mDrivetrain.setTankDriveSpeed(mControlBoard.getDriverLeftY(), mControlBoard.getDriverRightY());
+		//---------------------------------------------------
+		//intake
+		
+		if(mControlBoard.getSecondaryIntakeButton()==true )
+		{
+			mIntake.intakeIn();
+		}
+		else{mIntake.stopIntakeRoller();}
+		//---------------------------------------------------------------
+		
+		//climber
+		mClimber.setSpeed(mControlBoard.getClimberAxis());
+		//-----------------------------------------------------------------
+		
+	if(mShooter.getShooterReadyState() == ShooterReadyState.READY)
+	{ mAgitator.clockwiseAgitator();
+	
+	}else{mAgitator.stopAgitator();}
+	
+		
+		
 		
 		
 		
