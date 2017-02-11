@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Agitator extends Subsystem {
 	
-	public Agitator mInstance = new Agitator();
+	static Agitator mInstance = new Agitator();
 	
-	public Agitator getInstance(){
+	public static Agitator getInstance(){
 		return mInstance;
 	}
 	

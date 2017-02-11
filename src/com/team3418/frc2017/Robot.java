@@ -54,11 +54,11 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		mAgitator = new Agitator();
-		mClimber = new Climber();
-		mDrivetrain = new Drivetrain();
-		mIntake = new Intake();
-		mShooter = new Shooter();
+		mAgitator = Agitator.getInstance();
+		mClimber = Climber.getInstance();
+		mDrivetrain = Drivetrain.getInstance();
+		mIntake = Intake.getInstance();
+		mShooter = Shooter.getInstance();
 		
 		mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
 		mAnalogGyro = new AnalogGyro(0);
@@ -130,7 +130,6 @@ public class Robot extends IterativeRobot {
 		mClimber.setSpeed(mControlBoard.getClimberAxis());
 		//-----------------------------------------------------------------
 		
-		
 		//shooter
 		if (mControlBoard.getSecondaryShootButton()){
 			mShooter.StartShooting();
@@ -138,10 +137,6 @@ public class Robot extends IterativeRobot {
 			mShooter.stopShooter();
 		}
 		//---------------------------------------------------------------
-
-		
-		
-		
 		
 		//agitator
 		if(mShooter.isShooterReady()) {
