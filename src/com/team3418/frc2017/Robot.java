@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 		mClimber.stop();
 		mDrivetrain.setTankDriveSpeed(0, 0);
 		mIntake.stopIntakeRoller();
-		mShooter.stopFeeder();
+		mShooter.setFeederOpenLoop(0);
 	}
 	
 	@Override
@@ -59,10 +59,19 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
+		mControlBoard = ControlBoard.getInstance();
 		
 		mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
 		mAnalogGyro = new AnalogGyro(0);
 		//mI2c = new I2C(Port.kOnboard,84);
+		
+		mAgitator.stopAgitator();
+		mClimber.stop();
+		mDrivetrain.setHighGear();
+		mDrivetrain.setTankDriveSpeed(0, 0);
+		mShooter.setFeederOpenLoop(0);
+		mShooter.setLeftShooterOpenLoop(0);
+		mShooter.setRightShooterOpenLoop(0);
 	}
 	
 	@Override
@@ -75,7 +84,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		//All of this is still being tested, do not play with it unless you know what you're doing
 		//Uncomment below to test the drive foreward function
-		//driveForwardAuto();
+		driveForwardAuto();
 		//austin is a dinugs
 		
 		
@@ -84,7 +93,7 @@ public class Robot extends IterativeRobot {
 		
 		public void driveForwardAuto(){
 			System.out.println("Oh geeze here we go!");
-			mDrivetrain.LowGear();
+			mDrivetrain.setLowGear();
 			for(int x = 0; x != 1000; x++){
 			mDrivetrain.setTankDriveSpeed(.1,.1);
 			}
@@ -124,41 +133,48 @@ public class Robot extends IterativeRobot {
 		} else {
 			mIntake.stopIntakeRoller();
 		}
+		
 		//---------------------------------------------------------------
 		
 		//climber
-		mClimber.setSpeed(mControlBoard.getClimberAxis());
+		if (mControlBoard.getClimberAxis() > .10){
+			mClimber.setSpeed(mControlBoard.getClimberAxis());
+		} else {
+			mClimber.setSpeed(0);
+		}
 		//-----------------------------------------------------------------
 		
 		//shooter
 		if (mControlBoard.getSecondaryShootButton()){
-			mShooter.StartShooting();
+			mShooter.setShooterRpm(mShooter.getTargetShooterRpm());
 		} else {
-			mShooter.stopShooter();
+			mShooter.setLeftShooterOpenLoop(0);
+			mShooter.setRightShooterOpenLoop(0);
 		}
 		//---------------------------------------------------------------
 		
 		//agitator
 		if(mShooter.isShooterReady()) {
 			mAgitator.clockwiseAgitator();
-			mShooter.startFeeder();
+			mShooter.setFeederOpenLoop(mShooter.getTargetFeederSpeed());
 		} else {
 			mAgitator.stopAgitator();
-			mShooter.stopFeeder();
+			mShooter.setFeederOpenLoop(0);
 		}
 		//---------------------------------------------------------------
 
 		//  Drive train 
 		if(mControlBoard.getDriverHighGearButton()|| mControlBoard.getSecondaryHighGearButton()) {
-			mDrivetrain.HighGear();
+			mDrivetrain.setHighGear();
 		}
 		if(mControlBoard.getDriverLowGearButton()|| mControlBoard.getSecondaryLowGearButton()) {
-			mDrivetrain.LowGear();
+			mDrivetrain.setLowGear();
 		}
+		System.out.println(mDrivetrain.getDriveGear());
 		mDrivetrain.setTankDriveSpeed(mControlBoard.getDriverLeftY(), mControlBoard.getDriverRightY());
 		//---------------------------------------------------
 		
-		
+		updateAllSubsystems();
 	}
 	
 	@Override
