@@ -1,6 +1,8 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
+import com.team3418.frc2017.HardwareMap;
+
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,12 +20,13 @@ public class Drivetrain extends Subsystem {
     RobotDrive mDrive;
 	
     public Drivetrain(){
-    	mLeftSolenoid = new Solenoid(Constants.kLeftShifterSolenoidId);
-    	mRightSolenoid = new Solenoid(Constants.kRightShifterSolenoidId);
+    	mLeftSolenoid = HardwareMap.getInstance().mLeftShifterSolenoid;
+    	mRightSolenoid = HardwareMap.getInstance().mRightShifterSolenoid;
     	mDrive = new RobotDrive(Constants.kLeftFrontMotorId, Constants.kLeftRearMotorId, Constants.kRightFrontMotorId, Constants.kRightRearMotorId);
     }
     
     private DriveGear mDriveGear;
+    
     private double mLeftSpeed;
     private double mRightSpeed;
     private double mMoveSpeed;
@@ -49,14 +52,17 @@ public class Drivetrain extends Subsystem {
     	mDrive.arcadeDrive(move, rotate);
     }
     
-    public void setLowGear(){
-    	mDriveGear = DriveGear.LOW;
+    @Override
+    public void stop(){
+    	mDrive.stopMotor();
+    }
+    
+    private void setLowGear(){
     	mLeftSolenoid.set(true);
     	mRightSolenoid.set(true);
     }
 	
-    public void setHighGear(){
-    	mDriveGear = DriveGear.HIGH;
+    private void setHighGear(){
     	mLeftSolenoid.set(false);
     	mRightSolenoid.set(false);
     }
@@ -64,13 +70,36 @@ public class Drivetrain extends Subsystem {
 	@Override
 	public void updateSubsystem() {
 		
+		switch(mDriveGear){
+		case HIGH:
+			setHighGear();
+			break;
+		case LOW:
+			setLowGear();
+			break;
+		default:
+			setHighGear();
+			break;
+		}
+		
+		outputToSmartDashboard();
+		
+	}
+	
+	public void highGear(){
+		mDriveGear = DriveGear.HIGH;
+	}
+	
+	public void lowGear(){
+		mDriveGear = DriveGear.LOW;
 	}
 
 	@Override
 	public void outputToSmartDashboard() {
-		SmartDashboard.putNumber("DriveTrain_LeftMotorSpeed", mLeftSpeed);
-		SmartDashboard.putNumber("DriveTrain_RightMotorSpeed", mRightSpeed);
+		SmartDashboard.putNumber("DriveTrain_LeftMotorSpeeds", mLeftSpeed);
+		SmartDashboard.putNumber("DriveTrain_RightMotorSpeeds", mRightSpeed);
 		SmartDashboard.putNumber("DriveTrain_MoveValue", mMoveSpeed);
 		SmartDashboard.putNumber("DriveTrain_RotateValue", mRotateSpeed);
+		SmartDashboard.putString("Drive_Gear", mDriveGear.toString());
 	}
 }

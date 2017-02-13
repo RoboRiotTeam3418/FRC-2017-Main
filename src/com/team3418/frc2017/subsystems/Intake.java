@@ -1,9 +1,8 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Talon;
+import com.team3418.frc2017.HardwareMap;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem
@@ -14,17 +13,17 @@ public class Intake extends Subsystem
         return mInstance;
     }
     
-	private Talon mIntake;
+	private VictorSP mIntakeVictor;
     
 	public Intake() {
-		mIntake = new Talon(Constants.kIntakeRollerId);
+		mIntakeVictor = HardwareMap.getInstance().mIntakeTalon;
 		System.out.println("Intake Initialized");
 	}
     
     public enum IntakeRollerState {
-    	ROLLER_IN,
-    	ROLLER_OUT,
-    	ROLLER_STOP
+    	INTAKE,
+    	REVERSE,
+    	STOP
     }
 	
 	private IntakeRollerState mIntakeRollerState;
@@ -37,40 +36,42 @@ public class Intake extends Subsystem
 	public void updateSubsystem()
 	{
 		switch(mIntakeRollerState) {
-		case ROLLER_IN:
+		case INTAKE:
 			setRollerSpeed(Constants.kRollerIntakeSpeed);
 			break;
-		case ROLLER_OUT:
+		case REVERSE:
 			setRollerSpeed(Constants.kRollerReverseSpeed);
 			break;
-		case ROLLER_STOP:
+		case STOP:
 			setRollerSpeed(0);
 			break;
 		default:
-			mIntakeRollerState = IntakeRollerState.ROLLER_STOP;
+			mIntakeRollerState = IntakeRollerState.STOP;
 			break;
 		}
 	}	
 	
-	public void intakeIn(){
-		mIntakeRollerState = IntakeRollerState.ROLLER_IN;
+	public void intake(){
+		mIntakeRollerState = IntakeRollerState.INTAKE;
 	}
 	
-	public void intakeOut(){
-		mIntakeRollerState = IntakeRollerState.ROLLER_OUT;
+	public void reverse(){
+		mIntakeRollerState = IntakeRollerState.REVERSE;
 	}
 	
-	public void stopIntakeRoller(){
-		mIntakeRollerState = IntakeRollerState.ROLLER_STOP;
+	@Override
+	public void stop(){
+		mIntakeRollerState = IntakeRollerState.STOP;
 	}
 	
 
 	private void setRollerSpeed(double speed) {
-		mIntake.set(speed);
+		mIntakeVictor.set(speed);
 	}
 
 	@Override
 	public void outputToSmartDashboard() {
-		SmartDashboard.putNumber("Intake_Speed", mIntake.getSpeed());
+		SmartDashboard.putNumber("Intake_Speed", mIntakeVictor.getSpeed());
+		SmartDashboard.putString("Roller_State", mIntakeRollerState.toString());
 	}
 }

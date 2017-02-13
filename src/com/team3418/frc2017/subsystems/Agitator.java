@@ -1,74 +1,99 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-
-import edu.wpi.first.wpilibj.Talon;
+import com.team3418.frc2017.HardwareMap;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Agitator extends Subsystem {
 	
+	//variable to store subsystem instance
 	static Agitator mInstance = new Agitator();
+	//
 	
+	//method to get subsystem instance
 	public static Agitator getInstance(){
 		return mInstance;
 	}
+	//
 	
-	private Talon  mAgitator;
+	//variable to store hardware instance
+	private VictorSP mAgitatorVictor;
 	
+	//Constructor gets hardware instance and initializes settings
 	public Agitator() {
-		mAgitator = new Talon(Constants.kAgitatorId);
+		mAgitatorVictor = HardwareMap.getInstance().mAgitatorTalon;
 		System.out.println("Agitator Initialized");
 	}
+	//
 	
+	//possible subsystem states
 	public enum AgitatorState {
-    	AGITATOR_CLOCKWISE,
-    	AGITATOR_COUNTERCLOCKWISE,
-    	AGITATOR_STOP
+    	FEED,
+    	REVERSE,
+    	STOP
     }
+	//
 	
+	//variable to hold subsystem state
 	private AgitatorState mAgitatorState;
+	//
 	
+	//method to get current subsystem state
 	public AgitatorState getAgitatorState() {
 		return mAgitatorState;
 	}
+	//
 
+	//method to update subsystem state and run other periodic subsystem tasks
 	@Override
 	public void updateSubsystem() {
+		
 		switch(mAgitatorState) {
-		case AGITATOR_CLOCKWISE:
-			setMotorSpeed(Constants.kAgitatorSpeed);
+		case FEED:
+			setMotorSpeed(Constants.kAgitatorFeedSpeed);
 			break;
-		case AGITATOR_COUNTERCLOCKWISE:
+		case REVERSE:
 			setMotorSpeed(Constants.kAgitatorReverseSpeed);
 			break;
-		case AGITATOR_STOP:
+		case STOP:
 			setMotorSpeed(0);
 			break;
 		default:
-			mAgitatorState = AgitatorState.AGITATOR_STOP;
+			stop();
 			break;
 		}
+		
+		outputToSmartDashboard();
+	}
+	//
+	
+	//methods to set subsystem state
+	public void feed(){
+		mAgitatorState = AgitatorState.FEED;
 	}
 	
-	public void clockwiseAgitator(){
-		mAgitatorState = AgitatorState.AGITATOR_CLOCKWISE;
+	public void reverse(){
+		mAgitatorState = AgitatorState.REVERSE;
 	}
 	
-	public void counterclockwiseAgitator(){
-		mAgitatorState = AgitatorState.AGITATOR_COUNTERCLOCKWISE;
+	@Override
+	public void stop(){
+		mAgitatorState = AgitatorState.STOP;
 	}
-	
-	public void stopAgitator(){
-		mAgitatorState = AgitatorState.AGITATOR_STOP;
-	}
-	
+	//
 
+	//methods to control hardware
 	private void setMotorSpeed(double speed) {
-		mAgitator.set(speed);
+		mAgitatorVictor.set(speed);
 	}
-
+	//
+	
+	
+	//method to output helpful information to the smartdashboard
 	@Override
 	public void outputToSmartDashboard() {
-		SmartDashboard.putNumber("Agitator_Speed", mAgitator.getSpeed());
+		SmartDashboard.putNumber("Agitator_Speed", mAgitatorVictor.getSpeed());
+		SmartDashboard.putString("Agitator_State", mAgitatorState.toString());
 	}
 }
