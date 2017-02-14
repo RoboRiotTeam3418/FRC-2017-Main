@@ -28,7 +28,7 @@ public class ControlBoard {
     }
     
     public double getDriverLeftY(){
-    	return mDriverStick.getRawAxis(1);
+    	return -mDriverStick.getRawAxis(1);
     }
     
     public double getDriverRightX(){
@@ -36,7 +36,7 @@ public class ControlBoard {
     }
     
     public double getDriverRightY(){
-    	return mDriverStick.getRawAxis(5);
+    	return -mDriverStick.getRawAxis(5);
     }
     
     public int getDriverPov(){
@@ -52,18 +52,7 @@ public class ControlBoard {
     	return mDriverStick.getRawButton(6);
     }
     
-    public double getDriverClimberAxisRaw(){
-    	if (mDriverStick.getRawAxis(2) >.1) {
-        	return mDriverStick.getRawAxis(2);
-
-    	} else {
-        	return 0;
-    	}
-    }
     
-    public boolean getDriverClimberAxis(){
-        return mDriverStick.getRawAxis(2) > .1;
-    }
     
     public boolean getDriverClimberHoldButton(){
     	return mDriverStick.getRawAxis(3) > .1;
@@ -73,11 +62,22 @@ public class ControlBoard {
     //SECONDARY CONTROLS
     
     //secondary functional controls
+    public double getClimberAxisRaw(){
+    	return mSecondaryDriverStick.getRawAxis(3);
+    }
+
+    public boolean getClimberAxis(){
+    	return mSecondaryDriverStick.getRawAxis(3) > .1;
+    }
+
+    public boolean getClimberReverseAxis(){
+    	return mSecondaryDriverStick.getRawAxis(2) > .1;
+    }
     public boolean getSecondaryIntakeButton(){
     	return mSecondaryDriverStick.getRawButton(1);
     }
     
     public boolean getSecondaryShootButton(){
-    	return mSecondaryDriverStick.getRawButton(4);
+    	return mSecondaryDriverStick.getRawButton(6);
     }
 }

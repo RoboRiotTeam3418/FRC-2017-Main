@@ -22,8 +22,8 @@ public class HardwareMap {
 	public Solenoid mLeftShifterSolenoid;
 	public Solenoid mRightShifterSolenoid;
 	
-	public ADXRS450_Gyro mGyro;
-	public BuiltInAccelerometer mAccelerometer;
+	//public ADXRS450_Gyro mGyro;
+	//public BuiltInAccelerometer mAccelerometer;
 	
 	HardwareMap() {
 		
@@ -37,10 +37,10 @@ public class HardwareMap {
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
 			
 			
-			mGyro = new ADXRS450_Gyro();
-			mGyro.reset();
+			//mGyro = new ADXRS450_Gyro();
+			//mGyro.reset();
 			
-			mAccelerometer = new BuiltInAccelerometer();
+			//mAccelerometer = new BuiltInAccelerometer();
 			
 			
 			mCompressor = new Compressor(0);

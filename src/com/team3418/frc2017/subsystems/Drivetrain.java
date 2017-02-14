@@ -57,12 +57,12 @@ public class Drivetrain extends Subsystem {
     	mDrive.stopMotor();
     }
     
-    private void setLowGear(){
+    private void setLowGear() {//true
     	mLeftSolenoid.set(true);
     	mRightSolenoid.set(true);
     }
 	
-    private void setHighGear(){
+    private void setHighGear() {//false
     	mLeftSolenoid.set(false);
     	mRightSolenoid.set(false);
     }

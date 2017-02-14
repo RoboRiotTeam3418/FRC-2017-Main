@@ -147,10 +147,10 @@ public class Shooter extends Subsystem {
 		
 		switch(mFeederState){
 		case FEED:
-			
+			setFeederOpenLoop(Constants.kFeederSpeed);
 			break;
 		case STOP:
-			
+			setFeederOpenLoop(0);
 			break;
 		default:
 			stopFeeder();

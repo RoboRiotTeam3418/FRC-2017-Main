@@ -41,7 +41,7 @@ public class Climber extends Subsystem {
 		
 		switch(mClimberState){
 		case FORWARD:
-			setSpeed(mControlBoard.getDriverClimberAxisRaw());
+			setSpeed(mControlBoard.getClimberAxisRaw());
 			break;
 		case HOLD:
 			setSpeed(Constants.kClimberHoldSpeed);

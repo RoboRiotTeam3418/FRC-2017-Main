@@ -2,6 +2,7 @@ package com.team3418.frc2017;
 
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
+import com.team3418.frc2017.subsystems.Climber.ClimberState;
 import com.team3418.frc2017.subsystems.Drivetrain;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
@@ -17,8 +18,8 @@ public class Robot extends IterativeRobot {
 	//initalize main parts of the robot
 	HardwareMap mHardwareMap;
 	ControlBoard mControlBoard;
-	Accelerometer mAccelerometer;
-	AnalogGyro mAnalogGyro;
+	//Accelerometer mAccelerometer;
+	//AnalogGyro mAnalogGyro;
 	//I2C mI2c;
 		
 	//initialize subsystems
@@ -41,6 +42,7 @@ public class Robot extends IterativeRobot {
 		mAgitator.stop();
 		mClimber.stop();
 		mDrivetrain.stop();
+		mDrivetrain.highGear();
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
@@ -51,8 +53,8 @@ public class Robot extends IterativeRobot {
 		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
-		mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
-		mAnalogGyro = new AnalogGyro(0);
+		//mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
+		//mAnalogGyro = new AnalogGyro(0);
 		//mI2c = new I2C(Port.kOnboard,84);
 		
 		mAgitator = Agitator.getInstance();
@@ -60,6 +62,7 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
+		
 		
 		stopAllSubsystems();
 	}
@@ -74,22 +77,24 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		//All of this is still being tested, do not play with it unless you know what you're doing
 		//Uncomment below to test the drive foreward function
-		driveForwardAuto();		
-		
-		
+		int x, y;
+		System.out.println("Oh geeze here we go!");
+		for(x = 0; x != 500; x++){driveForwardAuto(); System.out.println(x);}
+		System.out.println("I'M FINISHED DRIVING!");
+		x = 0;
+		for(y = 0; y != 500; y++){turnRightAuto(); System.out.println(y);}
+		System.out.println("I'M FINISHED TURNING!");
+		y = 0;
 	}
 		
 	public void driveForwardAuto(){
-		System.out.println("Oh geeze here we go!");
 		mDrivetrain.lowGear();
-		System.out.println("drivetrain set to low gear");
-		
-		for(int x = 0; x > 1000; x++){
-			mDrivetrain.setTankDriveSpeed(.1,.1);
-			System.out.println(x + " / 1000");
-		}
-		
-		System.out.println("I'M FINISHED! (and hopefully didn't blow up)");
+		mDrivetrain.setArcadeDriveSpeed(.75, 0);
+	}
+	
+	public void turnRightAuto(){
+		mDrivetrain.lowGear();
+		mDrivetrain.setArcadeDriveSpeed(0, .75);
 	}
 	
 	@Override
@@ -124,6 +129,7 @@ public class Robot extends IterativeRobot {
 		//---------------------------------------------------------------
 		
 		//climber
+		/*
 		if (mControlBoard.getDriverClimberAxis()) {
 			mClimber.forward();
 		} else if (mControlBoard.getDriverClimberHoldButton()) {
@@ -131,6 +137,20 @@ public class Robot extends IterativeRobot {
 		} else {
 			mClimber.stop();
 		}
+		*/
+		
+		if (mControlBoard.getClimberReverseAxis()){
+			mClimber.stop();
+		}
+		
+		if (mControlBoard.getClimberAxis()){
+			mClimber.forward();
+		} else if (mClimber.getClimberState() != ClimberState.STOP) {
+			mClimber.hold();
+		}
+		
+		
+
 		//-----------------------------------------------------------------
 		
 		//shooter
@@ -185,6 +205,13 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		//---------------------------------------------------
+		
+		
+		
+		
+		
+		//System.out.println(Math.random());
+		
 		
 		updateAllSubsystems();
 	}
