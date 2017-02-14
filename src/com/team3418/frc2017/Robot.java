@@ -29,6 +29,7 @@ public class Robot extends IterativeRobot {
 	Intake mIntake;
 	Shooter mShooter;
 	
+	int x, y;
 	
 	public void updateAllSubsystems(){
 		mAgitator.updateSubsystem();
@@ -71,20 +72,36 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		stopAllSubsystems();
 		updateAllSubsystems();
+		x = 0;
+		y = 0;
 	}
 	
 	@Override
 	public void autonomousPeriodic() {
 		//All of this is still being tested, do not play with it unless you know what you're doing
 		//Uncomment below to test the drive foreward function
+		/*
 		int x, y;
 		System.out.println("Oh geeze here we go!");
-		for(x = 0; x != 500; x++){driveForwardAuto(); System.out.println(x);}
+		for(x = 0; x != 1000; x++){driveForwardAuto(); System.out.println(x);}
 		System.out.println("I'M FINISHED DRIVING!");
-		x = 0;
 		for(y = 0; y != 500; y++){turnRightAuto(); System.out.println(y);}
 		System.out.println("I'M FINISHED TURNING!");
-		y = 0;
+		mDrivetrain.setTankDriveSpeed(0, 0);
+		*/
+
+		if (x < 100){
+			driveForwardAuto();
+			System.out.println(x);
+			x++;
+		} else if (y < 100){
+			turnRightAuto();
+			System.out.println(y);
+			y++;
+		}
+		
+		
+		
 	}
 		
 	public void driveForwardAuto(){
