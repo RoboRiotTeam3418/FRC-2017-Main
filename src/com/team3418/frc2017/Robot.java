@@ -1,5 +1,11 @@
 package com.team3418.frc2017;
 
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.RotatedRect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Climber.ClimberState;
@@ -7,12 +13,18 @@ import com.team3418.frc2017.subsystems.Drivetrain;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	//initalize main parts of the robot
@@ -28,6 +40,14 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
+	
+	//Vision mVision;
+	
+	Pipeline mPipeline;
+	
+	public UsbCamera camera1;
+	
+	SendableChooser<String> chooser;
 	
 	int x, y;
 	
@@ -52,6 +72,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
+		chooser = new SendableChooser<>();
+		chooser.addDefault("Default Auto", "0");
+		chooser.addObject("My Auto", "1");
+		SmartDashboard.putData("Auto choices", chooser);
+		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
 		//mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
@@ -64,6 +89,51 @@ public class Robot extends IterativeRobot {
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
 		
+		
+		
+		mPipeline = new Pipeline();
+		camera1 = new UsbCamera("Usb Camera 0", 0);
+		
+		camera1.setResolution(320, 240);
+        camera1.setFPS(30);
+        camera1.setExposureManual(20);
+        camera1.setBrightness(0);
+        camera1.setWhiteBalanceManual(4000);
+        
+
+        
+        
+			Thread mThread = new Thread(() -> {
+	            CvSink cvSink1 = CameraServer.getInstance().getVideo(camera1);
+	            CvSource outputStream = CameraServer.getInstance().putVideo("Switcher", 320, 240);
+	            Mat image = new Mat();
+	            RotatedRect target;
+	            
+	            while(!Thread.interrupted()) {
+	                cvSink1.grabFrame(image);
+	                mPipeline.process(image);
+	        		for(int i = 0; i < mPipeline.findContoursOutput().size(); i++){
+	        			//System.out.println(mPipeline.findContoursOutput().get(i).toArray());
+	        			Imgproc.ellipse(image, Imgproc.minAreaRect(new MatOfPoint2f(mPipeline.findContoursOutput.get(i).toArray())), new Scalar(255, 0, 255), 3);
+	        			target = Imgproc.minAreaRect(new MatOfPoint2f(mPipeline.findContoursOutput.get(i).toArray()));
+	        			System.out.println(("target (" + i + ") X position = " + target.boundingRect().x));
+	        		}
+	                outputStream.putFrame(image);
+	                //System.out.println(mPipeline.filterContoursOutput());
+	            }
+	        });
+	        mThread.start();
+		
+		
+		
+		/*
+		camera1 = CameraServer.getInstance().startAutomaticCapture(0);
+		
+		mVision = new Vision("Vision_Test", camera1, 320, 240, 30);
+		mVision.setCameraParameters(20, 4000, 0);
+		mVision.setMaskParameters(95, 255, 244, 63, 122, 18);
+		mVision.startVision();
+		*/
 		
 		stopAllSubsystems();
 	}
@@ -118,6 +188,7 @@ public class Robot extends IterativeRobot {
 	public void disabledInit(){
 		stopAllSubsystems();
 		updateAllSubsystems();
+		//mVision.stopVision();
 	}
 	
 	@Override
@@ -134,7 +205,14 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		
+		/*
+		SmartDashboard.putNumber("Rectangle Area", mVision.getRectangleArea());
+		SmartDashboard.putNumber("Rectangle Width", mVision.getRectangleWidth());
+		SmartDashboard.putNumber("Rectangle Aspect", mVision.getRectangleAspect());
+		SmartDashboard.putNumber("Rectangle Distance", mVision.getTargetDistanceFromCamera());
+		SmartDashboard.putNumber("Rectangle X", mVision.getTargetScreenX());
+		SmartDashboard.putNumber("Rectangle Y", mVision.getTargetScreenY());
+		*/
 		
 		//intake
 		if(mControlBoard.getSecondaryIntakeButton()) {
@@ -156,14 +234,13 @@ public class Robot extends IterativeRobot {
 		}
 		*/
 		
-		if (mControlBoard.getClimberReverseAxis()){
-			mClimber.stop();
-		}
 		
-		if (mControlBoard.getClimberAxis()){
+		if (mControlBoard.getClimberForwardButton()) {
 			mClimber.forward();
-		} else if (mClimber.getClimberState() != ClimberState.STOP) {
+		} else if (mControlBoard.getClimberHoldButton()) {
 			mClimber.hold();
+		} else {
+			mClimber.stop();
 		}
 		
 		

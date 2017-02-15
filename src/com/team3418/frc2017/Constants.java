@@ -22,7 +22,7 @@ public class Constants {
     public static double kAgitatorReverseSpeed = .75;
     
 	public static double kClimberReverseSpeed = -1;
-	public static double kClimberHoldSpeed = .1;
+	public static double kClimberHoldSpeed = .2;
 	
 	public static double kFeederSpeed = .75;
 	

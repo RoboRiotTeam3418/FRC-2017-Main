@@ -62,22 +62,19 @@ public class ControlBoard {
     //SECONDARY CONTROLS
     
     //secondary functional controls
-    public double getClimberAxisRaw(){
-    	return mSecondaryDriverStick.getRawAxis(3);
+
+    public boolean getClimberForwardButton(){
+    	return mSecondaryDriverStick.getRawButton(6);
     }
 
-    public boolean getClimberAxis(){
-    	return mSecondaryDriverStick.getRawAxis(3) > .1;
-    }
-
-    public boolean getClimberReverseAxis(){
-    	return mSecondaryDriverStick.getRawAxis(2) > .1;
+    public boolean getClimberHoldButton(){
+    	return mSecondaryDriverStick.getRawButton(5);
     }
     public boolean getSecondaryIntakeButton(){
     	return mSecondaryDriverStick.getRawButton(1);
     }
     
     public boolean getSecondaryShootButton(){
-    	return mSecondaryDriverStick.getRawButton(6);
+    	return mSecondaryDriverStick.getRawAxis(3) > .1;
     }
 }
