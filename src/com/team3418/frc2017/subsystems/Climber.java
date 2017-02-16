@@ -1,9 +1,7 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-import com.team3418.frc2017.ControlBoard;
 import com.team3418.frc2017.HardwareMap;
-
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,13 +14,9 @@ public class Climber extends Subsystem {
     }
     
     private VictorSP mClimberVictor;
-    
-    private ControlBoard mControlBoard;
-    
+        
     public Climber() {
     	mClimberVictor = HardwareMap.getInstance().mClimberTalon;
-    	
-    	mControlBoard = ControlBoard.getInstance();
     }
     
   	public enum ClimberState {
