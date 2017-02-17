@@ -3,6 +3,9 @@ package com.team3418.frc2017;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -23,7 +26,11 @@ public class HardwareMap {
 	public Solenoid mLeftShifterSolenoid;
 	public Solenoid mRightShifterSolenoid;
 	
-	//public ADXRS450_Gyro mGyro;
+	
+	public Encoder mLeftDrivetrainEncoder;
+	public Encoder mRightDrivetrainEncoder;
+	
+	public ADXRS450_Gyro mGyro;
 	//public BuiltInAccelerometer mAccelerometer;
 	
 	HardwareMap() {
@@ -38,6 +45,8 @@ public class HardwareMap {
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
 			
 			
+	    	mLeftDrivetrainEncoder = new Encoder(1, 2);
+	    	mRightDrivetrainEncoder = new Encoder(3, 4);
 			//mGyro = new ADXRS450_Gyro();
 			//mGyro.reset();
 			
