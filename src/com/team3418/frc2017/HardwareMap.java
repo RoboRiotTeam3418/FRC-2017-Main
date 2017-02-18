@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -47,8 +50,15 @@ public class HardwareMap {
 			
 	    	mLeftDrivetrainEncoder = new Encoder(1, 2);
 	    	mRightDrivetrainEncoder = new Encoder(3, 4);
+	    	mLeftDrivetrainEncoder.setReverseDirection(true);
+	    	mLeftDrivetrainEncoder.setDistancePerPulse(1);
+	    	mRightDrivetrainEncoder.setDistancePerPulse(1);
+	    	mLeftDrivetrainEncoder.reset();
+	    	mRightDrivetrainEncoder.reset();
 			//mGyro = new ADXRS450_Gyro();
 			//mGyro.reset();
+	    	mLeftDrivetrainEncoder.pidGet();
+	    	//PIDController mLeftPIDController = new PIDController(Kp, Ki, Kd, Kf, source, output);
 			
 			//mAccelerometer = new BuiltInAccelerometer();
 			

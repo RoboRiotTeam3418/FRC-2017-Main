@@ -1,5 +1,8 @@
 package com.team3418.frc2017;
 
+import com.team3418.frc2017.auto.AutoExecutor;
+import com.team3418.frc2017.auto.actions.Action;
+import com.team3418.frc2017.auto.actions.DriveStraightAction;
 import com.team3418.frc2017.plugins.Pipeline;
 import com.team3418.frc2017.plugins.Vision;
 import com.team3418.frc2017.subsystems.Agitator;
@@ -9,26 +12,22 @@ import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
 	//initalize main parts of the robot
 	HardwareMap mHardwareMap;
 	ControlBoard mControlBoard;
-		
+	
 	//initialize subsystems
 	Agitator mAgitator;
 	Climber mClimber;
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
-	
+		
 	Vision mGearVision;
 	Vision mShooterVision;
 	
@@ -36,6 +35,8 @@ public class Robot extends IterativeRobot {
 	UsbCamera mShooterCamera;
 	
 	Pipeline mPipeline;
+	
+	AutoExecutor mAutoExecutor;
 	
 	int x, y;
 	
@@ -60,7 +61,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
-		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
 		
@@ -70,11 +70,13 @@ public class Robot extends IterativeRobot {
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
 		
+		
 		mPipeline = new Pipeline();
 		
 		mGearCamera = new UsbCamera("GearCamera", 0);
 		mShooterCamera = new UsbCamera("ShooterCamera", 1);
 		
+		/*
 		mGearVision = new Vision("Gear_Vision", mGearCamera, mPipeline, 320, 240, 30);
 		mGearVision.setCameraParameters(20, 4000, 0);
 		
@@ -83,7 +85,7 @@ public class Robot extends IterativeRobot {
 		
 		mGearVision.startVision();
 		mShooterVision.startVision();
-		
+		*/
 		stopAllSubsystems();
 	}
 	
@@ -91,56 +93,36 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		stopAllSubsystems();
 		updateAllSubsystems();
+		
+		mAutoExecutor = new AutoExecutor();
+		
 		x = 0;
 		y = 0;
 	}
 	
+	
 	@Override
 	public void autonomousPeriodic() {
+			isAutonomous();
+		mAutoExecutor.runAction(new DriveStraightAction(1000));
 		
 		
-		//All of this is still being tested, do not play with it unless you know what you're doing
-		//Uncomment below to test the drive foreward function
-		/*
-		int x, y;
-		System.out.println("Oh geeze here we go!");
-		for(x = 0; x != 1000; x++){driveForwardAuto(); System.out.println(x);}
-		System.out.println("I'M FINISHED DRIVING!");
-		for(y = 0; y != 500; y++){turnRightAuto(); System.out.println(y);}
-		System.out.println("I'M FINISHED TURNING!");
-		mDrivetrain.setTankDriveSpeed(0, 0);
-		*/
+	}
+	
+	
+	private Action DriveStraightAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		if (x < 100){
-			driveForwardAuto();
-			System.out.println(x);
-			x++;
-		} else if (y < 100){
-			turnRightAuto();
-			System.out.println(y);
-			y++;
-		}
-		
-		
-		
-	}
-		
-	public void driveForwardAuto(){
-		mDrivetrain.lowGear();
-		mDrivetrain.setArcadeDriveSpeed(.75, 0);
-	}
-	
-	public void turnRightAuto(){
-		mDrivetrain.lowGear();
-		mDrivetrain.setArcadeDriveSpeed(0, .75);
-	}
-	
 	@Override
 	public void disabledInit(){
 		stopAllSubsystems();
 		updateAllSubsystems();
-		mGearVision.stopVision();
-		mShooterVision.stopVision();
+		//mGearVision.stopVision();
+		//mShooterVision.stopVision();
+		mHardwareMap.mLeftDrivetrainEncoder.reset();
+		mHardwareMap.mRightDrivetrainEncoder.reset();
 	}
 	
 	@Override
@@ -249,7 +231,8 @@ public class Robot extends IterativeRobot {
 		
 		
 		//System.out.println(Math.random());
-		
+		SmartDashboard.putNumber("Left_Drivetrain_Encoder_Distance", mHardwareMap.mLeftDrivetrainEncoder.getDistance());
+		SmartDashboard.putNumber("Right_Drivetrain_Encoder_Distance", mHardwareMap.mRightDrivetrainEncoder.getDistance());
 		
 		updateAllSubsystems();
 	}

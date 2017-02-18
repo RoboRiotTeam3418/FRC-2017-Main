@@ -1,5 +1,7 @@
 package com.team3418.frc2017.auto;
 
+import com.team3418.frc2017.auto.actions.Action;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class AutoExecutor {
@@ -127,22 +129,13 @@ public class AutoExecutor {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void runAction(Action action) {
+        action.start();
+        while (!action.isFinished()) {
+            action.update();
+        }
+        action.done();
+    }
 	
 }
 
