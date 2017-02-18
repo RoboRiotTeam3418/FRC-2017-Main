@@ -8,7 +8,7 @@ public class AutoRoutine {
     protected boolean m_active = false;
 
     protected void routine() throws AutoModeEndedException {
-    	runAction(new DriveStraightAction(5));
+    	runAction(new DriveStraightAction(10));
 	}
 
     public void run() {

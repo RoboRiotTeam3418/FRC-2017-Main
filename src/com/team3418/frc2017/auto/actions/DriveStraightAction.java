@@ -21,7 +21,7 @@ public class DriveStraightAction implements Action {
 	private PID mRightDrivetrainPIDController = new PID(0.05, 0.0, 0.0, 1, 100);
 	
     public DriveStraightAction(double distance) {
-        mWantedDistance = distance;
+        mWantedDistance = distance*1000;
     }
 
 	@Override
@@ -43,7 +43,7 @@ public class DriveStraightAction implements Action {
 		
 		System.out.println(mLeftDrivetrainEncoderDistance + " " + mLeftPIDControllerOutput + " " + mWantedDistance);
 		
-		mDrivetrain.setTankDriveSpeed(mLeftPIDControllerOutput, mRightPIDCongtrollerOutput);
+		mDrivetrain.setTankDriveSpeed(.5, .5);
 	}
 
 	@Override

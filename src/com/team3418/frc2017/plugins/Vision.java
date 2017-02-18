@@ -319,6 +319,7 @@ class VisionThread extends Thread
 			{				
 				mVideoIn.grabFrame(mInputImage);
 				
+				/*
 				//Process the image
 				processImage();
 				
@@ -327,6 +328,7 @@ class VisionThread extends Thread
 				
 				//Draws ellipses over the two tracked targets for debugging
 				visionDebug();
+				*/
 				
 				//Have this thread wait for some time
 				Thread.sleep(Math.max(mThreadWait / 2, 1));
