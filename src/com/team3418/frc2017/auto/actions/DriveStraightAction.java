@@ -40,6 +40,9 @@ public class DriveStraightAction implements Action {
 		mLeftPIDControllerOutput = mLeftDrivetrainPIDController.calculateOutput();
 		mRightPIDCongtrollerOutput = mRightDrivetrainPIDController.calculateOutput();
 		
+		
+		System.out.println(mLeftDrivetrainEncoderDistance + " " + mLeftPIDControllerOutput + " " + mWantedDistance);
+		
 		mDrivetrain.setTankDriveSpeed(mLeftPIDControllerOutput, mRightPIDCongtrollerOutput);
 	}
 

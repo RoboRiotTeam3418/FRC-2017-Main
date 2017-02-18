@@ -1,6 +1,7 @@
 package com.team3418.frc2017;
 
-import com.team3418.frc2017.auto.AutoExecutor;
+import com.team3418.frc2017.auto.AutoExecuter;
+import com.team3418.frc2017.auto.AutoRoutine;
 import com.team3418.frc2017.auto.actions.Action;
 import com.team3418.frc2017.auto.actions.DriveStraightAction;
 import com.team3418.frc2017.plugins.Pipeline;
@@ -36,7 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	Pipeline mPipeline;
 	
-	AutoExecutor mAutoExecutor;
+	AutoExecuter mAutoExecuter = null;
 	
 	int x, y;
 	
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 		mAgitator.stop();
 		mClimber.stop();
 		mDrivetrain.stop();
-		mDrivetrain.highGear();
+		mDrivetrain.lowGear();
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
@@ -91,10 +92,19 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		if (mAutoExecuter != null) {
+            mAutoExecuter.stop();
+        }
+        mAutoExecuter = null;
+        
+        
+        mAutoExecuter = new AutoExecuter();
+        mAutoExecuter.setAutoRoutine(new AutoRoutine());
+        mAutoExecuter.start();
+		
 		stopAllSubsystems();
 		updateAllSubsystems();
 		
-		mAutoExecutor = new AutoExecutor();
 		
 		x = 0;
 		y = 0;
@@ -103,26 +113,22 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousPeriodic() {
-			isAutonomous();
-		mAutoExecutor.runAction(new DriveStraightAction(1000));
 		
 		
-	}
-	
-	
-	private Action DriveStraightAction() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
 	public void disabledInit(){
+		
+		if (mAutoExecuter != null) {
+            mAutoExecuter.stop();
+        }
+        mAutoExecuter = null;
+		
 		stopAllSubsystems();
 		updateAllSubsystems();
 		//mGearVision.stopVision();
 		//mShooterVision.stopVision();
-		mHardwareMap.mLeftDrivetrainEncoder.reset();
-		mHardwareMap.mRightDrivetrainEncoder.reset();
 	}
 	
 	@Override
@@ -132,6 +138,12 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopInit(){
+		
+		if (mAutoExecuter != null) {
+            mAutoExecuter.stop();
+        }
+        mAutoExecuter = null;
+        
 		stopAllSubsystems();
 		updateAllSubsystems();
 	}
