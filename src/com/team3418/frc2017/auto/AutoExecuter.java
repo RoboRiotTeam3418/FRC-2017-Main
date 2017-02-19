@@ -126,11 +126,11 @@ public class AutoExecuter {
 	}
 	
 	
-	private AutoRoutine m_auto_Routine;
+	private AutoModeBase mAutoMode;
     private Thread m_thread = null;
 
-    public void setAutoRoutine(AutoRoutine new_auto_Routine) {
-        m_auto_Routine = new_auto_Routine;
+    public void setAutoRoutine(AutoModeBase newAutoMode) {
+        mAutoMode = newAutoMode;
     }
 
     public void start() {
@@ -139,8 +139,8 @@ public class AutoExecuter {
             	
             	
                 public void run() {
-                    if (m_auto_Routine != null) {
-                        m_auto_Routine.run();
+                    if (mAutoMode != null) {
+                        mAutoMode.run();
                     }
                 }
             };
@@ -150,8 +150,8 @@ public class AutoExecuter {
     }
 
     public void stop() {
-        if (m_auto_Routine != null) {
-            m_auto_Routine.stop();
+        if (mAutoMode != null) {
+            mAutoMode.stop();
         }
         m_thread = null;
     }

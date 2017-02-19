@@ -18,7 +18,7 @@ public class Constants {
     public static double kRollerIntakeSpeed = 1;
 	public static double kRollerReverseSpeed = -1;
 	
-    public static double kAgitatorFeedSpeed = -.75;
+    public static double kAgitatorFeedSpeed = -.5;
     public static double kAgitatorReverseSpeed = .75;
     
 	public static double kClimberReverseSpeed = -1;
@@ -26,7 +26,7 @@ public class Constants {
 	
 	public static double kFeederSpeed = .75;
 	
-	public static double kTargetShooterRpm = 1450;
+	public static double kTargetShooterRpm = 1550;
 	
 	//Do not change anything below this line
 	//PWM (0-9)

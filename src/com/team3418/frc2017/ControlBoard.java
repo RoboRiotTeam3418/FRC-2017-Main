@@ -57,6 +57,14 @@ public class ControlBoard {
     public boolean getDriverClimberHoldButton(){
     	return mDriverStick.getRawAxis(3) > .1;
     }
+    
+    public boolean getDriveCameraSwitcherButton(){
+    	return mDriverStick.getRawButton(1);
+    }
+    
+    public double getDriverRightTrigger(){
+    	return mDriverStick.getRawAxis(3);
+    }
     //
     
     //SECONDARY CONTROLS

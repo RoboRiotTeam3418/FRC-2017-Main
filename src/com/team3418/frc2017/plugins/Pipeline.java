@@ -48,15 +48,15 @@ public class Pipeline {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 150.0;
-		double filterContoursMinPerimeter = 100.0;
-		double filterContoursMinWidth = 20.0;
+		double filterContoursMinArea = 0.0;
+		double filterContoursMinPerimeter = 30.0;
+		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 1000;
-		double filterContoursMinHeight = 5.0;
+		double filterContoursMinHeight = 0.0;
 		double filterContoursMaxHeight = 1000;
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 1000000;
-		double filterContoursMinVertices = 4.0;
+		double filterContoursMinVertices = 0.0;
 		double filterContoursMinRatio = 0;
 		double filterContoursMaxRatio = 1000;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);

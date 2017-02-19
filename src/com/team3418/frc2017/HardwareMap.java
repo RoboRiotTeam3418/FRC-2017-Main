@@ -47,7 +47,6 @@ public class HardwareMap {
 	    	mIntakeTalon = new VictorSP(Constants.kIntakeRollerId);
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
 			
-			
 	    	mLeftDrivetrainEncoder = new Encoder(1, 2);
 	    	mRightDrivetrainEncoder = new Encoder(3, 4);
 	    	mLeftDrivetrainEncoder.setReverseDirection(true);
