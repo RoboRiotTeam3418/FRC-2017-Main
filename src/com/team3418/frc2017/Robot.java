@@ -5,22 +5,13 @@ import java.util.ArrayList;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import com.team3418.frc2017.auto.AutoExecuter;
-import com.team3418.frc2017.auto.AutoModeBase;
-import com.team3418.frc2017.auto.actions.Action;
-import com.team3418.frc2017.auto.actions.DriveStraightAction;
-import com.team3418.frc2017.auto.actions.DriveWithGearCamAction;
-import com.team3418.frc2017.modes.DriveStraight;
-import com.team3418.frc2017.modes.GearMiddle;
-import com.team3418.frc2017.modes.LeftBoiler;
+import com.team3418.frc2017.auto.modes.DriveStraightMode;
 import com.team3418.frc2017.plugins.Pipeline;
-import com.team3418.frc2017.plugins.Vision;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
@@ -30,7 +21,6 @@ import com.team3418.frc2017.subsystems.Shooter;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -95,11 +85,7 @@ public class Robot extends IterativeRobot {
 		mClimber = Climber.getInstance();
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
-		mShooter = Shooter.getInstance();
-		
-		
-		//mPipeline = new Pipeline();
-		
+		mShooter = Shooter.getInstance();		
 		
 		
 		Thread t = new Thread(() -> {
@@ -191,7 +177,7 @@ public class Robot extends IterativeRobot {
         
         
         mAutoExecuter = new AutoExecuter();
-        mAutoExecuter.setAutoRoutine(new DriveStraight());
+        mAutoExecuter.setAutoRoutine(new DriveStraightMode());
         mAutoExecuter.start();
 		
 		stopAllSubsystems();

@@ -6,27 +6,17 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 
-public class DriveStraightAction implements Action {
+public class DriveStraightAction implements Action, PIDOutput {
 	
 	private double mWantedDistance;
 	private double mRightPIDControllerOutput;
 
-	private Drivetrain mDrivetrain = Drivetrain.getInstance();
-	private Encoder mRightDrivetrainEncoder = HardwareMap.getInstance().mRightDrivetrainEncoder;
+	private Drivetrain mDrivetrain = Drivetrain.getInstance();	
 	
-	
-	private PIDOutput mRightPIDOutput = new PIDOutput() {
-		
-		@Override
-		public void pidWrite(double output) {
-			mRightPIDControllerOutput = output;		
-		}
-	};
-	
-	private PIDController mRightDrivetrainPIDController = new PIDController(0.25, 0.0, 0.1, mRightDrivetrainEncoder, mRightPIDOutput);
+	private PIDController mRightDrivetrainPIDController = new PIDController(0.01, 0.0, 0.1, , );
 	
     public DriveStraightAction(double distance) {
-        mWantedDistance = distance*1000;
+        mWantedDistance = distance;
         mRightDrivetrainPIDController.enable();
     }
     
@@ -41,7 +31,6 @@ public class DriveStraightAction implements Action {
 	@Override
 	public void start() {
 		
-		mRightDrivetrainEncoder.reset();
 		mRightDrivetrainPIDController.setAbsoluteTolerance(20);
 		mRightDrivetrainPIDController.setSetpoint(mWantedDistance);
 		mRightDrivetrainPIDController.setOutputRange(-1, 1);
@@ -51,8 +40,6 @@ public class DriveStraightAction implements Action {
 
 	@Override
 	public void update() {
-		
-		System.out.println("PID setpoint = " + mRightDrivetrainPIDController.getSetpoint() + " Encoder Distance = " + mRightDrivetrainEncoder.getDistance());
 		
 		mDrivetrain.setTankDriveSpeed(mRightPIDControllerOutput, mRightPIDControllerOutput);
 	}
@@ -71,6 +58,12 @@ public class DriveStraightAction implements Action {
 		mDrivetrain.setTankDriveSpeed(0, 0);
 		mRightDrivetrainPIDController.disable();
 		System.out.println("finished with drive straight action");
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		// TODO Auto-generated method stub
+		
 	}
     
 }

@@ -3,6 +3,8 @@ package com.team3418.frc2017.subsystems;
 import com.team3418.frc2017.Constants;
 import com.team3418.frc2017.HardwareMap;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,14 +17,33 @@ public class Drivetrain extends Subsystem {
         return mInstance;
     }
     
+    
+    
     Solenoid mLeftSolenoid;
     Solenoid mRightSolenoid;
     RobotDrive mDrive;
+    Encoder mLeftEncoder;
+    Encoder mRightEncoder;
 	
     public Drivetrain(){
+    	
+		final double ticksPerRev = 1024;
+		final double pi = 3.14;
+		final double radius = 2;
+		final double calculated = (2*pi)/ticksPerRev*radius;
+    	
     	mLeftSolenoid = HardwareMap.getInstance().mLeftShifterSolenoid;
     	mRightSolenoid = HardwareMap.getInstance().mRightShifterSolenoid;
     	mDrive = new RobotDrive(Constants.kLeftFrontMotorId, Constants.kLeftRearMotorId, Constants.kRightFrontMotorId, Constants.kRightRearMotorId);
+    	
+    	mLeftEncoder = new Encoder(1, 2);
+		mLeftEncoder.setDistancePerPulse(calculated);
+		mLeftEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+		mLeftEncoder.setReverseDirection(true);
+		mRightEncoder = new Encoder(3, 4);
+		mRightEncoder.setDistancePerPulse(calculated);
+		mRightEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+    	
     }
     
     private DriveGear mDriveGear;
@@ -38,6 +59,15 @@ public class Drivetrain extends Subsystem {
     
     public DriveGear getDriveGear(){
     	return mDriveGear;
+    }
+    
+    public void resetEncoders(){
+    	mLeftEncoder.reset();
+    	mRightEncoder.reset();
+    }
+    
+    public double getDistance(){
+    	return (mLeftEncoder.getDistance() + mRightEncoder.getDistance()) / 2.0;
     }
 	
     public void setTankDriveSpeed(double left, double right){
