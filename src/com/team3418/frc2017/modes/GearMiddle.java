@@ -8,7 +8,6 @@ public class GearMiddle extends AutoModeBase{
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		runAction(new DriveStraightAction(-4));
+		runAction(new DriveStraightAction(-10));
 	}
-
 }

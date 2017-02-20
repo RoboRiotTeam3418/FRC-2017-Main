@@ -22,7 +22,6 @@ public class DriveWithGearCamAction implements Action {
 		
 		@Override
 		public void pidWrite(double output) {
-			System.out.println("writing left pid output");
 			mLeftPIDControllerOutput = output;
 		}
 	};
@@ -72,7 +71,6 @@ public class DriveWithGearCamAction implements Action {
 		mLeftDrivetrainEncoderDistance = mLeftDrivetrainEncoder.getDistance();
 		mRightDrivetrainEncoderDistance = mRightDrivetrainEncoder.getDistance();
 		
-		System.out.println("left enc distance = " + mLeftDrivetrainEncoderDistance +" left pid output = "+ mLeftPIDControllerOutput + " wanted distance = " + mWantedDistance);
 		
 		mDrivetrain.setTankDriveSpeed(mLeftPIDControllerOutput, mRightPIDControllerOutput);
 	}

@@ -32,6 +32,7 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -47,6 +48,9 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
+	
+	private Encoder mRightDrivetrainEncoder = HardwareMap.getInstance().mRightDrivetrainEncoder;
+	private Encoder mLeftDrivetrainEncoder = HardwareMap.getInstance().mLeftDrivetrainEncoder;
 	
 	/*
 	Vision mGearVision;
@@ -141,7 +145,6 @@ public class Robot extends IterativeRobot {
                     cvSink2.grabFrame(image);
             	}
             	
-            	System.out.println(allowcamera1);
             	mPipeline.process(image);
             	mContours = mPipeline.filterContoursOutput();
             	
@@ -193,15 +196,21 @@ public class Robot extends IterativeRobot {
 		
 		stopAllSubsystems();
 		updateAllSubsystems();
-				
-		x = 0;
-		y = 0;
+
+		
+		/*all of Aidan's stupid stuff
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		
 	}
 	
 	
 	@Override
 	public void autonomousPeriodic() {
-		
 		
 	}
 

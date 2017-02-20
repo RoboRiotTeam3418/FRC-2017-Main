@@ -8,7 +8,7 @@ public class DriveStraight extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		new DriveStraightAction(5.0);
+		runAction(new DriveStraightAction(5.0));
 	}
 
 }
