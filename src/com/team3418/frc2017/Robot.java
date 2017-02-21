@@ -24,6 +24,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -39,19 +40,9 @@ public class Robot extends IterativeRobot {
 	Intake mIntake;
 	Shooter mShooter;
 	
-	private Encoder mRightDrivetrainEncoder = HardwareMap.getInstance().mRightDrivetrainEncoder;
-	private Encoder mLeftDrivetrainEncoder = HardwareMap.getInstance().mLeftDrivetrainEncoder;
+	private Encoder mRightDrivetrainEncoder;
+	private Encoder mLeftDrivetrainEncoder;
 	
-	/*
-	Vision mGearVision;
-	Vision mShooterVision;
-	*/
-	/*
-	UsbCamera mGearCamera;
-	UsbCamera mShooterCamera;
-	*/
-	
-	//Pipeline mPipeline;
 	
 	AutoExecuter mAutoExecuter = null;
 	
@@ -85,7 +76,10 @@ public class Robot extends IterativeRobot {
 		mClimber = Climber.getInstance();
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
-		mShooter = Shooter.getInstance();		
+		mShooter = Shooter.getInstance();	
+		
+		mLeftDrivetrainEncoder = mDrivetrain.mLeftEncoder;
+		mRightDrivetrainEncoder = mDrivetrain.mRightEncoder;
 		
 		
 		Thread t = new Thread(() -> {
@@ -207,6 +201,8 @@ public class Robot extends IterativeRobot {
             mAutoExecuter.stop();
         }
         mAutoExecuter = null;
+        
+        mDrivetrain.resetEncoders();
 		
 		stopAllSubsystems();
 		updateAllSubsystems();
@@ -235,6 +231,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
+		//System.out.println(mHardwareMap.mAnalogGyro.getAngle());
+		//System.out.println(mHardwareMap.mAccelerometer.getX());
+		//System.out.println(mHardwareMap.mAccelerometer.getAccelerations());
 		
 		//intake
 		if(mControlBoard.getSecondaryIntakeButton()) {
@@ -330,15 +329,26 @@ public class Robot extends IterativeRobot {
 		
 		
 		//System.out.println(Math.random());
-		SmartDashboard.putNumber("Left_Drivetrain_Encoder_Distance", mHardwareMap.mLeftDrivetrainEncoder.getDistance());
-		SmartDashboard.putNumber("Right_Drivetrain_Encoder_Distance", mHardwareMap.mRightDrivetrainEncoder.getDistance());
+		SmartDashboard.putNumber("Left_Drivetrain_Encoder_Distance", mLeftDrivetrainEncoder.getDistance());
+		SmartDashboard.putNumber("Right_Drivetrain_Encoder_Distance", mRightDrivetrainEncoder.getDistance());
 		
 		updateAllSubsystems();
 		
 		if (mControlBoard.getDriverRightTrigger() > .2){
 			mIntake.setRollerSpeed(mControlBoard.getDriverRightTrigger());
 		}
-		System.out.println(mControlBoard.getDriverRightTrigger());
+		//System.out.println(mControlBoard.getDriverRightTrigger());
+		
+		if (mControlBoard.getDriverIncreaseSpeed()) {
+			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()+1));
+			System.out.println(mShooter.getTargetShooterRpm());
+		} else if (mControlBoard.getDriverDecreaseSpeed()) {
+			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()-1));
+			System.out.println(mShooter.getTargetShooterRpm());
+		}
+		
+		
+		
 	}
 	
 	@Override

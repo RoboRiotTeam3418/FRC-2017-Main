@@ -26,7 +26,7 @@ public class Constants {
 	
 	public static double kFeederSpeed = .75;
 	
-	public static double kTargetShooterRpm = 1630;
+	public static double kTargetShooterRpm = 1550;
 	
 	//Do not change anything below this line
 	//PWM (0-9)

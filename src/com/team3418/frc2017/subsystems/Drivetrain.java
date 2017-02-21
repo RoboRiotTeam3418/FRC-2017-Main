@@ -22,8 +22,8 @@ public class Drivetrain extends Subsystem {
     Solenoid mLeftSolenoid;
     Solenoid mRightSolenoid;
     RobotDrive mDrive;
-    Encoder mLeftEncoder;
-    Encoder mRightEncoder;
+    public Encoder mLeftEncoder;
+    public Encoder mRightEncoder;
 	
     public Drivetrain(){
     	
@@ -43,7 +43,6 @@ public class Drivetrain extends Subsystem {
 		mRightEncoder = new Encoder(3, 4);
 		mRightEncoder.setDistancePerPulse(calculated);
 		mRightEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
-    	
     }
     
     private DriveGear mDriveGear;
@@ -71,6 +70,7 @@ public class Drivetrain extends Subsystem {
     }
 	
     public void setTankDriveSpeed(double left, double right){
+    	//System.out.println("Left speed = " + left + " right speed = " + right);
     	mLeftSpeed = left;
     	mRightSpeed = right;
     	mDrive.tankDrive(mLeftSpeed, mRightSpeed);
