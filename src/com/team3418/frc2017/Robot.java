@@ -238,10 +238,10 @@ public class Robot extends IterativeRobot {
 		
 		updateAllSubsystems();
 		
+		/*
 		if (mControlBoard.getDriverRightTrigger() > .2){
 			mIntake.setRollerSpeed(mControlBoard.getDriverRightTrigger());
 		}
-		//System.out.println(mControlBoard.getDriverRightTrigger());
 		
 		if (mControlBoard.getDriverIncreaseSpeed()) {
 			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()+1));
@@ -250,7 +250,7 @@ public class Robot extends IterativeRobot {
 			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()-1));
 			System.out.println(mShooter.getTargetShooterRpm());
 		}
-		
+		*/
 		
 		
 	}

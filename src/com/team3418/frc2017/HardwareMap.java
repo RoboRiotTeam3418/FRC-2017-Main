@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GyroBase;
@@ -38,6 +39,7 @@ public class HardwareMap {
 	public Solenoid mRightShifterSolenoid;
 	
 	public ITG3200 mGyro;
+	DigitalInput mGyroInterrupt;
 	//public AnalogGyro mAnalogGyro;
 	
 	//public ADXL345_I2C mAccelerometer;
@@ -45,7 +47,7 @@ public class HardwareMap {
 	//public Encoder mLeftDrivetrainEncoder;
 	//public Encoder mRightDrivetrainEncoder;
 	//public BuiltInAccelerometer mAccelerometer;
-	
+		
 	
 	HardwareMap() {
 		
@@ -64,6 +66,11 @@ public class HardwareMap {
 			//mGyro = new ITG3200();
 			
 			mCompressor = new Compressor(0);
+			//I2C.Port.kOnboard, false
+			
+			
+			mGyroInterrupt = new DigitalInput(0);
+			mGyro = new ITG3200(I2C.Port.kOnboard, mGyroInterrupt);
 		}
 		catch(Exception e)
 		{
