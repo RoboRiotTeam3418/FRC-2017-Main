@@ -43,7 +43,7 @@ public class Drivetrain extends Subsystem {
 		mRightEncoder = new Encoder(3, 4);
 		mRightEncoder.setDistancePerPulse(calculated);
 		mRightEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
-    }
+		}
     
     private DriveGear mDriveGear;
     

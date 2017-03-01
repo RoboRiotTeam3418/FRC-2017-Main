@@ -1,31 +1,17 @@
 package com.team3418.frc2017;
 
-import java.awt.image.VolatileImage;
-import java.util.ArrayList;
-
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-
 import com.team3418.frc2017.auto.AutoExecuter;
 import com.team3418.frc2017.auto.modes.DriveStraightMode;
-import com.team3418.frc2017.plugins.Pipeline;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
+import com.team3418.frc2017.subsystems.ITG3200Subsystem;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
@@ -39,6 +25,7 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
+	ITG3200Subsystem mITG3200Subsystem;
 	
 	private Encoder mRightDrivetrainEncoder;
 	private Encoder mLeftDrivetrainEncoder;
@@ -62,6 +49,7 @@ public class Robot extends IterativeRobot {
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
+		mITG3200Subsystem.resetGyroX();
 	}
 	
 	@Override
@@ -74,11 +62,15 @@ public class Robot extends IterativeRobot {
 		mClimber = Climber.getInstance();
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
-		mShooter = Shooter.getInstance();	
+		mShooter = Shooter.getInstance();
+		
+		mITG3200Subsystem = ITG3200Subsystem.getInstance();
+		mITG3200Subsystem.calibrateGyro();
 		
 		mLeftDrivetrainEncoder = mDrivetrain.mLeftEncoder;
 		mRightDrivetrainEncoder = mDrivetrain.mRightEncoder;
         
+		
 		
 		stopAllSubsystems();
 	}
