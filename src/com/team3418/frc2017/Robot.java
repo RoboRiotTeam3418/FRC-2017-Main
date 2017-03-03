@@ -5,12 +5,8 @@ import com.team3418.frc2017.auto.modes.DriveStraightMode;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
-import com.team3418.frc2017.subsystems.ITG3200Subsystem;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
-
-import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -25,10 +21,6 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
-	ITG3200Subsystem mITG3200Subsystem;
-	
-	private Encoder mRightDrivetrainEncoder;
-	private Encoder mLeftDrivetrainEncoder;
 	
 	
 	AutoExecuter mAutoExecuter = null;
@@ -49,7 +41,6 @@ public class Robot extends IterativeRobot {
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
-		mITG3200Subsystem.resetGyroX();
 	}
 	
 	@Override
@@ -63,12 +54,6 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
-		
-		mITG3200Subsystem = ITG3200Subsystem.getInstance();
-		mITG3200Subsystem.calibrateGyro();
-		
-		mLeftDrivetrainEncoder = mDrivetrain.mLeftEncoder;
-		mRightDrivetrainEncoder = mDrivetrain.mRightEncoder;
         
 		
 		
@@ -105,6 +90,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
+		updateAllSubsystems();
+		
 	}
 
 	@Override
@@ -119,8 +106,6 @@ public class Robot extends IterativeRobot {
 		
 		stopAllSubsystems();
 		updateAllSubsystems();
-		//mGearVision.stopVision();
-		//mShooterVision.stopVision();
 	}
 	
 	@Override
@@ -225,6 +210,8 @@ public class Robot extends IterativeRobot {
 		
 		
 		
+		System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
+		System.out.println("Accel = " + mHardwareMap.mAccelerometer.getX());
 		
 		//System.out.println(Math.random());
 		

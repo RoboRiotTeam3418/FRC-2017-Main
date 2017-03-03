@@ -39,10 +39,11 @@ public class Drivetrain extends Subsystem {
     	mLeftEncoder = new Encoder(1, 2);
 		mLeftEncoder.setDistancePerPulse(calculated);
 		mLeftEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
-		mLeftEncoder.setReverseDirection(true);
+		mLeftEncoder.setReverseDirection(false);
 		mRightEncoder = new Encoder(3, 4);
 		mRightEncoder.setDistancePerPulse(calculated);
 		mRightEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+		mRightEncoder.setReverseDirection(true);
 		}
     
     private DriveGear mDriveGear;
@@ -130,6 +131,7 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("DriveTrain_RightMotorSpeeds", mRightSpeed);
 		SmartDashboard.putNumber("DriveTrain_MoveValue", mMoveSpeed);
 		SmartDashboard.putNumber("DriveTrain_RotateValue", mRotateSpeed);
+		SmartDashboard.putNumber("Right_Drivetrain_Encoder_Distance", mRightEncoder.getDistance());
 		SmartDashboard.putString("Drive_Gear", mDriveGear.toString());
 	}
 }

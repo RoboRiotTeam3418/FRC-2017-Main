@@ -1,46 +1,92 @@
 package com.team3418.frc2017.auto.actions;
 
+import com.team3418.frc2017.HardwareMap;
 import com.team3418.frc2017.subsystems.Drivetrain;
+
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 
-public class DriveStraightAction implements Action, PIDOutput {
+public class DriveStraightAction implements Action {
 	
-	private double mSetPoint;
-	private double mPIDRate;
+	private double mDistanceSetPoint;
+	private double mGyroSetpoint;
+	private double mEncoderPIDRate;
+	private double mGyroPIDRate;
 
-	private Drivetrain mDrivetrain = Drivetrain.getInstance();	
-	private Encoder mEncoder = mDrivetrain.mRightEncoder;
+	private Drivetrain mDrivetrain;
+	private Encoder mEncoder;
+	private ADXRS450_Gyro mGyro;
 	
-	private PIDController mPIDController;
+	private PIDController mEncoderPIDController;
+	private PIDController mGyroPIDController;
+	
+	
+	private PIDOutput mEncoderPIDOutput;
+	private PIDOutput mGyroPIDOutput;
+	
+	
+	
 	
     public DriveStraightAction(double distance) {
-        mSetPoint = distance;
+    	mDrivetrain = Drivetrain.getInstance();
+    	mEncoder = Drivetrain.getInstance().mRightEncoder;
+    	mGyro = HardwareMap.getInstance().mGyro;
         
-        mPIDController = new PIDController(0.2, 0.0, 0.0, mEncoder, this);
-        mPIDController.setOutputRange(-1, 1);
-        mPIDController.setAbsoluteTolerance(10);
+    	mEncoderPIDOutput = new PIDOutput() {
+    		@Override
+    		public void pidWrite(double output) {
+    			mEncoderPIDRate = output;
+    		}
+    	};
+    	
+        mGyroPIDOutput = new PIDOutput() {
+    		@Override
+    		public void pidWrite(double output) {
+    			mGyroPIDRate = output;
+    		}
+    	};
+        
+        mGyroPIDController = new PIDController(0.1, 0, 0, mGyro, mGyroPIDOutput);
+        mGyroPIDController.setInputRange(-180, 180);
+        mGyroPIDController.setOutputRange(-.2, .2);
+        mGyroPIDController.setAbsoluteTolerance(2);
+        
+        mEncoderPIDController = new PIDController(0.4, 0.0, 0.0, mEncoder, mEncoderPIDOutput);
+        mEncoderPIDController.setOutputRange(-.9, .9);
+        mEncoderPIDController.setAbsoluteTolerance(.1);
+    	
+    	
+    	mDistanceSetPoint = distance;
+        mGyroSetpoint = mGyro.getAngle();
+        
+        
+        
+    	
         
     }
     
     @Override
 	public void start() {
 		mDrivetrain.highGear();
-		mPIDController.setSetpoint(mSetPoint);
-		mPIDController.enable();
+		mEncoderPIDController.setSetpoint(mDistanceSetPoint);
+		mEncoderPIDController.enable();
+		
+		mGyroPIDController.setSetpoint(mGyroSetpoint);
+		mGyroPIDController.enable();
 		
 	}
     
     @Override
 	public void update() {
-    	System.out.println(mPIDController.getError());
-		mDrivetrain.setTankDriveSpeed(mPIDRate, mPIDRate);
+    	System.out.println("Encoder PID rate = " + mEncoderPIDRate + " Gyro PID Rate = " + mGyroPIDRate);
+		mDrivetrain.setTankDriveSpeed(mEncoderPIDRate + mGyroPIDRate, mEncoderPIDRate + -mGyroPIDRate);
 	}
     
     @Override
 	public boolean isFinished() {
-		if (mPIDController.onTarget()) {
+		if (mEncoderPIDController.onTarget() && mGyroPIDController.onTarget()) {
 			return true;
 		}
 		return false;
@@ -50,13 +96,9 @@ public class DriveStraightAction implements Action, PIDOutput {
 	public void done() {
 		mDrivetrain.setTankDriveSpeed(0, 0);
 		mDrivetrain.resetEncoders();
-		mPIDController.disable();
+		mEncoderPIDController.disable();
+		mGyroPIDController.disable();
 		System.out.println("finished with drive straight action");
-	}
-	
-	@Override
-	public void pidWrite(double output) {
-		mPIDRate = output;
 	}
     
 }

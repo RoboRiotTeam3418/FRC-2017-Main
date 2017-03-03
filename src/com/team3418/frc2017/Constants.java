@@ -15,7 +15,7 @@ public class Constants {
     public static double kFlywheelOnTargetTolerance = 100.0;
     
     //speed constants
-    public static double kRollerIntakeSpeed = 1;
+    public static double kRollerIntakeSpeed = .8;
 	public static double kRollerReverseSpeed = -1;
 	
     public static double kAgitatorFeedSpeed = -.75;

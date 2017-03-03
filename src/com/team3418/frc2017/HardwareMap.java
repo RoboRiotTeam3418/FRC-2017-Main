@@ -1,12 +1,10 @@
 package com.team3418.frc2017;
 
-import com.team3418.frc2017.plugins.ITG3200;
-
-import edu.wpi.first.wpilibj.ADXL345_I2C;
+import edu.wpi.first.wpilibj.ADXL345_SPI;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
@@ -27,10 +25,11 @@ public class HardwareMap {
 	public Solenoid mLeftShifterSolenoid;
 	public Solenoid mRightShifterSolenoid;
 	
-	public ITG3200 mGyro;
-	DigitalInput mGyroInterrupt;
 	
-	ADXL345_I2C mAccelerometer;
+	
+	
+	public ADXRS450_Gyro mGyro;
+	public ADXL345_SPI mAccelerometer;
 	
 	
 	HardwareMap() {
@@ -43,13 +42,15 @@ public class HardwareMap {
 	    	mRightShifterSolenoid = new Solenoid(Constants.kRightShifterSolenoidId);
 	    	mIntakeTalon = new VictorSP(Constants.kIntakeRollerId);
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
-			
-	    	mAccelerometer = new ADXL345_I2C(Port.kOnboard,Range.k8G);
-			
+	    	
 			mCompressor = new Compressor(0);
 			
-			mGyroInterrupt = new DigitalInput(0);
-			mGyro = new ITG3200(I2C.Port.kOnboard, mGyroInterrupt);
+			
+	    	mAccelerometer = new ADXL345_SPI(Port.kOnboardCS0, Range.k8G);
+			
+			mGyro = new ADXRS450_Gyro();
+			mGyro.reset();
+			mGyro.calibrate();
 		}
 		catch(Exception e)
 		{
