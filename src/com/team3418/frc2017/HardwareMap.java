@@ -28,9 +28,7 @@ public class HardwareMap {
 	
 	
 	
-	public ADXRS450_Gyro mGyro;
-	public ADXL345_SPI mAccelerometer;
-	
+	public ADXRS450_Gyro mGyro;	
 	
 	HardwareMap() {
 		
@@ -44,9 +42,6 @@ public class HardwareMap {
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
 	    	
 			mCompressor = new Compressor(0);
-			
-			
-	    	mAccelerometer = new ADXL345_SPI(Port.kOnboardCS0, Range.k8G);
 			
 			mGyro = new ADXRS450_Gyro();
 			mGyro.reset();

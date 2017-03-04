@@ -51,11 +51,11 @@ public class DriveStraightAction implements Action {
         mGyroPIDController = new PIDController(0.1, 0, 0, mGyro, mGyroPIDOutput);
         mGyroPIDController.setInputRange(-180, 180);
         mGyroPIDController.setOutputRange(-.2, .2);
-        mGyroPIDController.setAbsoluteTolerance(2);
+        mGyroPIDController.setAbsoluteTolerance(1);
         
-        mEncoderPIDController = new PIDController(0.4, 0.0, 0.0, mEncoder, mEncoderPIDOutput);
-        mEncoderPIDController.setOutputRange(-.9, .9);
-        mEncoderPIDController.setAbsoluteTolerance(.1);
+        mEncoderPIDController = new PIDController(1, 0.0, 1, mEncoder, mEncoderPIDOutput);
+        mEncoderPIDController.setOutputRange(-1, 1);
+        mEncoderPIDController.setAbsoluteTolerance(1);
     	
     	
     	mDistanceSetPoint = distance;

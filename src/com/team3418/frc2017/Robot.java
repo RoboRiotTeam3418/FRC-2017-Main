@@ -211,7 +211,6 @@ public class Robot extends IterativeRobot {
 		
 		
 		System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
-		System.out.println("Accel = " + mHardwareMap.mAccelerometer.getX());
 		
 		//System.out.println(Math.random());
 		
