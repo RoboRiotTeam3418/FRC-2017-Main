@@ -146,6 +146,8 @@ public class Robot extends IterativeRobot {
 			mClimber.forward();
 		} else if (mControlBoard.getClimberHoldButton()) {
 			mClimber.hold();
+		} else if (mControlBoard.getClimberReverseButton()) {
+			mClimber.reverse();
 		} else {
 			mClimber.stop();
 		}

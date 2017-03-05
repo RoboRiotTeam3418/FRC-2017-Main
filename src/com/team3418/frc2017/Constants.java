@@ -21,12 +21,27 @@ public class Constants {
     public static double kAgitatorFeedSpeed = -.75;
     public static double kAgitatorReverseSpeed = .75;
     
-	public static double kClimberReverseSpeed = -1;
-	public static double kClimberHoldSpeed = .25;
+	public static double kClimberReverseSpeed = -.5;
+	public static double kClimberHoldSpeed = .35;
 	
 	public static double kFeederSpeed = .75;
 	
 	public static double kTargetShooterRpm = 1550;
+	
+	
+	//autonomous gyro/encoder on target deadzones
+	public static double kGyroDeadzone = .25;
+	public static double kEncoderDeadzone = .25;
+	
+	//autonomous Gyro/Encoder min speed
+	public static double kGyroMinSpeed = .05;
+	public static double kGyroMaxSpeed = .75;
+	public static double kEncoderMinSpeed = .3;
+	public static double kEncoderMaxSpeed = .75;
+	
+	//autonomous timed drive straight speed
+	public static double kTimedDriveSpeed = .65;
+	
 	
 	//Do not change anything below this line
 	//PWM (0-9)

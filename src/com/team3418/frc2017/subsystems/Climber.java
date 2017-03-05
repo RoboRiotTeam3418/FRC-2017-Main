@@ -20,7 +20,7 @@ public class Climber extends Subsystem {
     }
     
   	public enum ClimberState {
-      	FORWARD, STOP, HOLD
+      	FORWARD, REVERSE, STOP, HOLD
     }
   	
   	private ClimberState mClimberState;
@@ -36,6 +36,9 @@ public class Climber extends Subsystem {
 		switch(mClimberState){
 		case FORWARD:
 			setSpeed(1);
+			break;
+		case REVERSE:
+			setSpeed(Constants.kClimberReverseSpeed);
 			break;
 		case HOLD:
 			setSpeed(Constants.kClimberHoldSpeed);
@@ -54,6 +57,10 @@ public class Climber extends Subsystem {
 	
 	public void forward(){
 		mClimberState = ClimberState.FORWARD;
+	}
+	
+	public void reverse() {
+		mClimberState = ClimberState.REVERSE;
 	}
 	
 	@Override

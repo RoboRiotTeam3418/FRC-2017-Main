@@ -86,6 +86,12 @@ public class ControlBoard {
     public boolean getClimberHoldButton(){
     	return mSecondaryDriverStick.getRawButton(5);
     }
+    
+    public boolean getClimberReverseButton(){
+    	return mSecondaryDriverStick.getRawAxis(2) > .1;
+    }
+    
+    
     public boolean getSecondaryIntakeButton(){
     	return mSecondaryDriverStick.getRawButton(1);
     }
