@@ -45,18 +45,18 @@ public class ControlBoard {
     
     //driver functional controls
     public boolean getDriverHighGearButton(){
-    	return mDriverStick.getRawButton(5);
-    }
-    
-    public boolean getDriverLowGearButton(){
     	return mDriverStick.getRawButton(6);
     }
     
+    public boolean getDriverLowGearButton(){
+    	return mDriverStick.getRawButton(5);
+    }
     
-    
+    /*
     public boolean getDriverClimberHoldButton(){
     	return mDriverStick.getRawAxis(3) > .1;
     }
+    */
     
     public boolean getDriveCameraSwitcherButton(){
     	return mDriverStick.getRawButton(1);
@@ -66,6 +66,7 @@ public class ControlBoard {
     	return mDriverStick.getRawAxis(3);
     }
     
+    /*
     public boolean getDriverIncreaseSpeed(){
     	return mDriverStick.getRawButton(4);
     }
@@ -73,6 +74,7 @@ public class ControlBoard {
     public boolean getDriverDecreaseSpeed(){
     	return mDriverStick.getRawButton(1);
     }
+    */
     //
     
     //SECONDARY CONTROLS

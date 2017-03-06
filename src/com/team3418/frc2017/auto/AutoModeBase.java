@@ -1,7 +1,6 @@
 package com.team3418.frc2017.auto;
 
 import com.team3418.frc2017.auto.actions.Action;
-import com.team3418.frc2017.auto.actions.DriveStraightActionNotWorking;
 
 public abstract class AutoModeBase {
     protected double m_update_rate = 1.0 / 50.0;

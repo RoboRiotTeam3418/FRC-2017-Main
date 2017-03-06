@@ -6,9 +6,6 @@ import com.team3418.frc2017.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveStraightActionDistance implements Action {
 	
@@ -21,24 +18,18 @@ public class DriveStraightActionDistance implements Action {
 	private Encoder mEncoder;
 	private ADXRS450_Gyro mGyro;
 	
-	
-	
     public DriveStraightActionDistance(double distance) {
     	mDrivetrain = Drivetrain.getInstance();
     	mEncoder = Drivetrain.getInstance().mRightEncoder;
     	mGyro = HardwareMap.getInstance().mGyro;
     	
-    	
     	mDistanceSetPoint = distance;
         mGyroSetpoint = mGyro.getAngle();
-        
-        
     }
     
     @Override
 	public void start() {
-		mDrivetrain.highGear();
-		
+		mDrivetrain.lowGear();
 	}
     
     @Override
@@ -46,9 +37,7 @@ public class DriveStraightActionDistance implements Action {
     	calcEncoderSpeed();
     	calcGyroSpeed();
     	System.out.println("drivetrain speed = " + mEncoderCorrectionSpeed + " rotational speed = " + mGyroCorrectionSpeed);
-    	
 		mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mGyroCorrectionSpeed, mEncoderCorrectionSpeed + -mGyroCorrectionSpeed);
-		
 	}
     
     @Override
@@ -112,10 +101,6 @@ public class DriveStraightActionDistance implements Action {
 		}
 	}
 	
-	
-	
-	
-	
 	private boolean isGyroOnTarget() {
 		if (calcEncoderError() < Constants.kEncoderDeadzone && calcEncoderError() > -Constants.kEncoderDeadzone){
 			return true;
@@ -131,8 +116,4 @@ public class DriveStraightActionDistance implements Action {
 			return false;
 		}
 	}
-	
-	
-	
-    
 }

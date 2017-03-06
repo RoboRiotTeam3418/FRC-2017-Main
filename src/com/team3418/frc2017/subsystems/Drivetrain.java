@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
@@ -23,12 +22,7 @@ public class Drivetrain extends Subsystem {
     Solenoid mLeftSolenoid;
     Solenoid mRightSolenoid;
     RobotDrive mDrive;
-    /*
-    Talon mFL;
-    Talon mFR;
-    Talon mBL;
-    Talon mBR;
-    */
+    
     public Encoder mLeftEncoder;
     public Encoder mRightEncoder;
 	
@@ -41,13 +35,11 @@ public class Drivetrain extends Subsystem {
     	
     	mLeftSolenoid = HardwareMap.getInstance().mLeftShifterSolenoid;
     	mRightSolenoid = HardwareMap.getInstance().mRightShifterSolenoid;
-    	mDrive = new RobotDrive(Constants.kLeftFrontMotorId, Constants.kLeftRearMotorId, Constants.kRightFrontMotorId, Constants.kRightRearMotorId);
-    	/*
-    	mFL = new Talon(Constants.kLeftFrontMotorId);
-    	mFR = new Talon(Constants.kRightFrontMotorId);
-    	mBL = new Talon(Constants.kLeftRearMotorId);
-    	mBR = new Talon(Constants.kRightRearMotorId);
-    	*/
+    	
+    	mDrive = new RobotDrive(Constants.kLeftFrontMotorId,
+    							Constants.kLeftRearMotorId,
+    							Constants.kRightFrontMotorId,
+    							Constants.kRightRearMotorId);
     	
     	mLeftEncoder = new Encoder(1, 2);
 		mLeftEncoder.setDistancePerPulse(calculated);
@@ -88,15 +80,6 @@ public class Drivetrain extends Subsystem {
     	mLeftSpeed = left;
     	mRightSpeed = right;
     	mDrive.tankDrive(mLeftSpeed, mRightSpeed);
-    	
-    	/*
-    	mBL.set(left);
-    	mFL.set(left);
-    	mBR.set(right);
-    	mFR.set(right);
-    	*/
-    	
-    	
     }
     
     public void setArcadeDriveSpeed(double move, double rotate){
@@ -110,14 +93,14 @@ public class Drivetrain extends Subsystem {
     	mDrive.stopMotor();
     }
     
-    private void setLowGear() {//true
-    	mLeftSolenoid.set(true);
-    	mRightSolenoid.set(true);
-    }
-	
-    private void setHighGear() {//false
+    private void setLowGear() {
     	mLeftSolenoid.set(false);
     	mRightSolenoid.set(false);
+    }
+	
+    private void setHighGear() {
+    	mLeftSolenoid.set(true);
+    	mRightSolenoid.set(true);
     }
 	
 	@Override

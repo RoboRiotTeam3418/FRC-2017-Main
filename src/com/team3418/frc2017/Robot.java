@@ -22,9 +22,8 @@ public class Robot extends IterativeRobot {
 	Intake mIntake;
 	Shooter mShooter;
 	
-	
 	AutoExecuter mAutoExecuter = null;
-		
+	
 	public void updateAllSubsystems(){
 		mAgitator.updateSubsystem();
 		mClimber.updateSubsystem();
@@ -37,7 +36,7 @@ public class Robot extends IterativeRobot {
 		mAgitator.stop();
 		mClimber.stop();
 		mDrivetrain.stop();
-		mDrivetrain.highGear();
+		mDrivetrain.lowGear();
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
@@ -54,8 +53,6 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
-        
-		
 		
 		stopAllSubsystems();
 	}
@@ -74,15 +71,6 @@ public class Robot extends IterativeRobot {
 		
 		stopAllSubsystems();
 		updateAllSubsystems();
-
-		
-		/*all of Aidan's stupid stuff
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
 		
 	}
 	

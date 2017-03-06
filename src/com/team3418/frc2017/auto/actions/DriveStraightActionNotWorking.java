@@ -23,12 +23,8 @@ public class DriveStraightActionNotWorking implements Action {
 	private PIDController mEncoderPIDController;
 	private PIDController mGyroPIDController;
 	
-	
 	private PIDOutput mEncoderPIDOutput;
 	private PIDOutput mGyroPIDOutput;
-	
-	
-	
 	
     public DriveStraightActionNotWorking(double distance) {
     	mDrivetrain = Drivetrain.getInstance();
@@ -57,44 +53,29 @@ public class DriveStraightActionNotWorking implements Action {
         mEncoderPIDController = new PIDController(.75, 0.0001, 3, mEncoder, mEncoderPIDOutput);
         mEncoderPIDController.setOutputRange(-.85, .85);
         mEncoderPIDController.setAbsoluteTolerance(.75);
-    	
-    	
+        
     	mDistanceSetPoint = distance;
         mGyroSetpoint = mGyro.getAngle();
-        
-        
     }
     
     @Override
 	public void start() {
-		mDrivetrain.highGear();
+		mDrivetrain.lowGear();
 		mEncoderPIDController.setSetpoint(mDistanceSetPoint);
 		mEncoderPIDController.enable();
 		
 		mGyroPIDController.setSetpoint(mGyroSetpoint);
 		mGyroPIDController.enable();
-		
 	}
     
     @Override
 	public void update() {
     	SmartDashboard.putNumber("Auto_Encoder_PIDOutput", mEncoderPIDController.getError());
     	SmartDashboard.putNumber("Gyro_PIDOutput", mGyroPIDController.getError());
-    	
-    	//System.out.println("gyro error = " + mGyroPIDController.getError() + " gyro PID rate = " + mGyroPIDRate);
-    	//System.out.println("encoder error = " + mEncoderPIDController.getError() + " Encoder PID rate = " + mEncoderPIDRate);
     	System.out.println(mGyroSetpoint - mGyro.getAngle());
-    	//System.out.println("Encoder PID rate = " + mEncoderPIDRate + " Gyro PID Rate = " + mGyroPIDRate);
     	
     	mGyroPIDRate = mGyroPIDController.getError() * .05;
-    	
-    	//System.out.println("gyro pid rate = " + mGyroPIDRate);
-		mDrivetrain.setTankDriveSpeed(mEncoderPIDRate + mGyroPIDRate, mEncoderPIDRate + -mGyroPIDRate);
-		
-		//mDrivetrain.setTankDriveSpeed(mEncoderPIDRate, mEncoderPIDRate);
-    	//mDrivetrain.setArcadeDriveSpeed(mEncoderPIDRate, mGyroPIDRate);
-
-		
+    	mDrivetrain.setTankDriveSpeed(mEncoderPIDRate + mGyroPIDRate, mEncoderPIDRate + -mGyroPIDRate);
 	}
     
     @Override
@@ -113,5 +94,4 @@ public class DriveStraightActionNotWorking implements Action {
 		mGyroPIDController.disable();
 		System.out.println("finished with drive straight action");
 	}
-    
 }

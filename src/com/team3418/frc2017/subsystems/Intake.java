@@ -1,7 +1,6 @@
 package com.team3418.frc2017.subsystems;
 
 import com.team3418.frc2017.Constants;
-import com.team3418.frc2017.ControlBoard;
 import com.team3418.frc2017.HardwareMap;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
