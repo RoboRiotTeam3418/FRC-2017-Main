@@ -28,6 +28,7 @@ public class TurnAction implements Action {
 	public void update() {
     	calcGyroSpeed();
 		mDrivetrain.setTankDriveSpeed(mGyroCorrectionSpeed, -mGyroCorrectionSpeed);
+		System.out.println("error = " + calcGyroError() + " deadzone is " + Constants.kTurnDeadzone + " correction speed = " + mGyroCorrectionSpeed );
 	}
     
     @Override
@@ -68,7 +69,7 @@ public class TurnAction implements Action {
 	}
 	
 	private boolean isGyroOnTarget() {
-		if (calcGyroError() < Constants.kGyroDeadzone && calcGyroError() > -Constants.kGyroDeadzone){
+		if (calcGyroError() < Constants.kTurnDeadzone && calcGyroError() > -Constants.kTurnDeadzone){
 			return true;
 		} else {
 			return false;

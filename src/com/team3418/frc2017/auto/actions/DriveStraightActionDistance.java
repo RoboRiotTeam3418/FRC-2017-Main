@@ -36,13 +36,13 @@ public class DriveStraightActionDistance implements Action {
 	public void update() {
     	calcEncoderSpeed();
     	calcGyroSpeed();
-    	System.out.println("drivetrain speed = " + mEncoderCorrectionSpeed + " rotational speed = " + mGyroCorrectionSpeed);
+    	System.out.println("drivetrain speed = " + mEncoderCorrectionSpeed);
 		mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mGyroCorrectionSpeed, mEncoderCorrectionSpeed + -mGyroCorrectionSpeed);
 	}
     
     @Override
 	public boolean isFinished() {
-		if (isEncoderOnTarget() && isGyroOnTarget()) {
+		if (isEncoderOnTarget()) {
 			return true;
 		}
 		return false;
@@ -102,7 +102,7 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private boolean isGyroOnTarget() {
-		if (calcEncoderError() < Constants.kEncoderDeadzone && calcEncoderError() > -Constants.kEncoderDeadzone){
+		if (calcGyroError() < Constants.kGyroDeadzone && calcGyroError() > -Constants.kGyroDeadzone){
 			return true;
 		} else {
 			return false;
@@ -110,7 +110,8 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private boolean isEncoderOnTarget() {
-		if (calcGyroError() < Constants.kGyroDeadzone && calcGyroError() > -Constants.kGyroDeadzone) {
+		if (calcEncoderError() < Constants.kEncoderDeadzone && calcEncoderError() > -Constants.kEncoderDeadzone) {
+			System.out.println("encoder is on target");
 			return true;
 		} else {
 			return false;

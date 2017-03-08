@@ -1,26 +1,27 @@
 package com.team3418.frc2017;
 
-import org.json.simple.JSONArray;
+import java.util.ArrayList;
 import com.team3418.frc2017.auto.AutoModeBase;
 import com.team3418.frc2017.auto.AutoModeEndedException;
-import com.team3418.frc2017.auto.modes.DriveStraightMode;
+import com.team3418.frc2017.auto.modes.MIddleGearExitLeft;
 import com.team3418.frc2017.auto.modes.StandStillMode;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SmartDashboardInteractions {
 	
+	private SendableChooser<String> mAutoChooser;
+	
     private static final String AUTO_OPTIONS = "auto_options";
     private static final String SELECTED_AUTO_MODE = "selected_auto_mode";
     private static final AutonOption DEFAULT_MODE = AutonOption.STAND_STILL;
     
-    @SuppressWarnings("unchecked")
 	public void initWithDefaults() {
-        JSONArray autoOptionsArray = new JSONArray();
+		mAutoChooser = new SendableChooser<>();
         for (AutonOption autonOption : AutonOption.values()) {
-            autoOptionsArray.add(autonOption.name);
+            //mAutoChooser.addObject(autonOption.name, autonOption);
         }
-        SmartDashboard.putString(AUTO_OPTIONS, autoOptionsArray.toString());
+        //SmartDashboard.putString(AUTO_OPTIONS, autoOptionsArray.toString());
         SmartDashboard.putString(SELECTED_AUTO_MODE, DEFAULT_MODE.name);
     }
 
@@ -41,7 +42,7 @@ public class SmartDashboardInteractions {
      * objects directly, so use this enum to protects us from WPILIb.
      */
     enum AutonOption {
-        STAY_HIGH_ONE_BALL_DRIVE_BACK("No Drop Drive Back"), //
+        MIDDLE_GEAR("place middle gear"), //
         TEST_DRIVE("test drive"),//
         STAND_STILL("stand still and do nothing");//
         
@@ -68,8 +69,8 @@ public class SmartDashboardInteractions {
     
     private AutoModeBase createAutoMode(AutonOption autonOption) {
         switch (autonOption) {
-        case STAY_HIGH_ONE_BALL_DRIVE_BACK:
-            return new DriveStraightMode();
+        case MIDDLE_GEAR:
+            return new MIddleGearExitLeft();
         case TEST_DRIVE:
             return new AutoModeBase() {
                 @Override

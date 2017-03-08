@@ -1,7 +1,8 @@
 package com.team3418.frc2017;
 
 import com.team3418.frc2017.auto.AutoExecuter;
-import com.team3418.frc2017.auto.modes.DriveStraightMode;
+import com.team3418.frc2017.auto.modes.LeftGearExitLeft;
+import com.team3418.frc2017.auto.modes.MIddleGearExitLeft;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
@@ -14,6 +15,7 @@ public class Robot extends IterativeRobot {
 	//initalize main parts of the robot
 	HardwareMap mHardwareMap;
 	ControlBoard mControlBoard;
+	SmartDashboardInteractions mSmartDashboardInteractions;
 	
 	//initialize subsystems
 	Agitator mAgitator;
@@ -47,12 +49,15 @@ public class Robot extends IterativeRobot {
 		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
+		mSmartDashboardInteractions = new SmartDashboardInteractions();
 		
 		mAgitator = Agitator.getInstance();
 		mClimber = Climber.getInstance();
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
+		
+		mSmartDashboardInteractions.initWithDefaults();
 		
 		stopAllSubsystems();
 	}
@@ -66,7 +71,7 @@ public class Robot extends IterativeRobot {
         
         
         mAutoExecuter = new AutoExecuter();
-        mAutoExecuter.setAutoRoutine(new DriveStraightMode());
+        mAutoExecuter.setAutoRoutine(new MIddleGearExitLeft());
         mAutoExecuter.start();
 		
 		stopAllSubsystems();
