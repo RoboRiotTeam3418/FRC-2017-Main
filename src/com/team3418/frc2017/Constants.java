@@ -44,23 +44,9 @@ public class Constants {
 	//-Autonomous-//
 	//-----------//
 	
-	//Drive Straight (distance) (timed)
-	public static double kGyroMinSpeed = .03;
-	public static double kGyroMaxSpeed = .5;
-	public static double kGyroDeadzone = .25;
 	
-	//Drive Straight (distance)
-	public static double kEncoderMinSpeed = .28;
-	public static double kEncoderMaxSpeed = .75;
-	public static double kEncoderDeadzone = 1;
 	
-	//Drive Straight (timed)
-	public static double kTimedDriveSpeed = .65;
 	
-	//Turn (angle)
-	public static double kTurnMinSpeed = .4;
-	public static double kTurnMaxSpeed = .65;
-	public static double kTurnDeadzone = .25;
 	
 	//--------------------------//
 	//-static port assignments-//

@@ -1,89 +1,383 @@
 package com.team3418.frc2017.plugins;
 
 import java.util.ArrayList;
-
+import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import com.team3418.frc2017.ControlBoard;
-
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 
-public class MinionVision {
-
+public class MinionVision {	
 	
-	
-	ControlBoard mControlBoard = ControlBoard.getInstance();
-	
-	
+	VisionThread visionThread;
 	
 	public MinionVision() {
 		
-		Thread t = new Thread(() -> {
-			boolean allowcamera1 = false;
-			
-    		UsbCamera camera1 = new UsbCamera("camera1", 0);
-            camera1.setResolution(320, 240);
-            camera1.setFPS(30);
-            camera1.setBrightness(0);
-            camera1.setExposureManual(20);
-            camera1.setWhiteBalanceManual(4000);
-            
-            UsbCamera camera2 = new UsbCamera("camera2", 1);
-            camera2.setResolution(320, 240);
-            camera2.setFPS(30);
-            camera2.setBrightness(0);
-            camera2.setExposureManual(20);
-            camera2.setWhiteBalanceManual(4000);
-            
-            CvSink cvSink1 = CameraServer.getInstance().getVideo(camera1);
-            CvSink cvSink2 = CameraServer.getInstance().getVideo(camera2);
-
-            CvSource outputStream1 = CameraServer.getInstance().putVideo("switcher2", 320, 240);
-            
-            Mat image = new Mat();
-            ArrayList<MatOfPoint> mContours = new ArrayList<MatOfPoint>();
-            
-            Pipeline mPipeline = new Pipeline();
-            
-            while(!Thread.interrupted()) {
-            	
-            	if (mControlBoard.getDriveCameraSwitcherButton()){
-            		allowcamera1 = !allowcamera1;
-            	}
-            	
-            	if (allowcamera1){
-                    cvSink1.setEnabled(true);
-                    cvSink2.setEnabled(false);
-                    cvSink1.grabFrame(image);
-            	} else {
-                    cvSink2.setEnabled(true);
-                    cvSink1.setEnabled(false);
-                    cvSink2.grabFrame(image);
-            	}
-            	
-            	mPipeline.process(image);
-            	mContours = mPipeline.filterContoursOutput();
-            	
-            	for(int i = 0; i < mContours.size(); i++)
-    			{
-    				//Make a rectangle that fits the current contours
-    				//System.out.println(Imgproc.boundingRect(mContours.get(i)).x);
-    				Imgproc.rectangle(image, Imgproc.boundingRect(mContours.get(i)).br(), Imgproc.boundingRect(mContours.get(i)).tl(), new Scalar(255, 0, 255));
-    				
-    			}
-                Imgproc.line(image, new Point(160, 0), new Point(160, 240) , new Scalar(255, 0, 255), 1);
-                Imgproc.line(image, new Point(0, 120), new Point(340, 120) , new Scalar(255, 0, 255), 1);
-
-                outputStream1.putFrame(image);
-            }
-        });
-        t.start();
 	}
+	
+	//This function starts the vision thread
+	public void startVision()
+	{		//If there is no instance of the vision thread...
+		if(visionThread == null)
+		{
+			//Create a new instance of the vision thread
+			visionThread = new VisionThread(30);
+		}
+		//Actually run the thread
+		visionThread.start();
+	}
+	
+	//This function stops the vision thread
+	public void stopVision()
+	{
+		//If an instance of the vision thread exists...
+		if(visionThread != null)
+		{	
+			//Interrupt the vision thread - this sets the Thread.interrupted() parameter to true
+			visionThread.interrupt();
+		}
+	}
+	
+	
+	//This function returns the width of the current largest rectangle being tracked
+		public double getRectangleWidth()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.target1.boundingRect().width;
+			
+			return 0;
+		}
+		
+		//This function returns the area of the current largest rectangle being tracked
+		public double getRectangleArea()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.target1.size.area();
+				
+			return 0;
+		}
+		
+		//This function returns the aspect ratio of the current largest rectangle being tracked
+		public double getRectangleAspect()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.target1.size.width / visionThread.target1.size.height;
+				
+			return 0;
+		}
+		
+		//This function returns the distance that the currently tracked target is from the camera
+		public double getTargetDistanceFromCamera()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.targetDistance;
+				
+			return 0;
+		}
+		
+		//This function returns the x screen position of the currently tracked target
+		public double getTargetScreenX()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.target1.boundingRect().x;
+				
+			return 0;
+		}
+		
+		//This function returns the y screen position of the currently tracked target
+		public double getTargetScreenY()
+		{
+			if(visionThread != null && visionThread.targetsFound > 0)
+				return visionThread.target1.boundingRect().y;
+				
+			return 0;
+		}
+		
+		public double[] getVisionShift(double power){
+			return visionThread.visionPID(power);
+		}
 }
+
+class VisionThread extends Thread {
+	
+	//Target filtering variables
+	final double minTargetSize = 5; //The minimum area a rectangle has to take up on-screen to be considered as a target
+	
+	//Variables for calculating target distance
+	//To use distance calculation correctly, you must measure the width of a target (in pixels) from a known distance away from the camera
+	final double cameraFOV = 60; //The horizontal FOV of the camera (in degrees)
+	final double fovPlaneDistance = 5; //The distance from the camera that the target's size was measured (in feet)
+	final double targetWidth = 10.0 / 12.0; //The width of the target (this should be the width of the area actually seen by the camera)
+	final double targetWidthPixels = 61; //The width of the target on-screen measured at "fovPlaneDistance" away from the camera (in pixels)
+	final double targetWidthConversion = targetWidth / targetWidthPixels; //This creates a conversion to convert target width from pixels to feet
+	final double gearTargetWidth = 0;
+	
+	//camera object used to reference camera
+	UsbCamera camera;
+	
+	//References to get and put video frames
+	CvSink videoIn;
+	CvSource videoOut;
+	
+	//References to hold images
+	Mat inputImage;
+	Mat outputImage;
+	
+	//list of contorus to store pipeline output
+	List<MatOfPoint> contours;
+	
+	//pipeline to send images through to be processed
+	Pipeline mPipeline = new Pipeline();
+	
+	//The time (in milliseconds) that the vision thread should wait
+	int threadWait;
+	
+	//These are variables returned by the vision system
+	//Since this class is being executed on a separate thread, they have to be volatile to make sure no conflicts arise when another script tries to access them
+	public volatile RotatedRect target1;
+	public volatile RotatedRect target2;
+	public volatile int targetsFound;
+	public volatile double targetDistance;
+	
+	//Called when an instance of this class is created
+	public VisionThread (double framerate)
+	{	
+		//camera setup
+		camera = new UsbCamera("camera1", 0);
+        camera.setResolution(320, 240);
+        camera.setFPS(30);
+        camera.setBrightness(0);
+        camera.setExposureManual(20);
+        camera.setWhiteBalanceManual(4000);
+        
+        //sink / source setup
+        videoIn = CameraServer.getInstance().getVideo(camera);
+        videoOut = CameraServer.getInstance().putVideo("GearCam", 320, 240);
+        
+        //References to hold images
+    	inputImage = new Mat();
+    	outputImage = new Mat();
+        
+    	//countour list setup
+        contours = new ArrayList<MatOfPoint>();
+        
+        //pipeline setup
+        mPipeline = new Pipeline();
+		
+		
+		//Initialize our target variables
+		target1 = new RotatedRect();
+		target2 = new RotatedRect();
+		targetsFound = 0;
+		
+		//Calculate how long the thread should wait given a frequency (and ensure it waits at least 1 ms)
+		threadWait = Math.max((int)(Math.round(1.0 / framerate)) * 1000, 1);
+		}
+
+	
+	//This function is run on a separate thread when the visionThread.start() method is called
+	public void run()
+	{
+		//Catch an InterruptedExceptions
+		try
+		{	
+			//Loop until this thread is interrupted
+			while(!Thread.interrupted())
+			{				
+				//Get the most recent image from the camera and store it
+				videoIn.grabFrame(inputImage);
+				
+				//Process the camera's image
+				processImage();
+				
+				//Process the target
+				processTarget();
+				
+				//Draws rectangles over the two tracked targets for debugging
+				visionDebug();
+				
+				//Have this thread wait for some time
+				Thread.sleep(Math.max(threadWait / 2, 1));
+			}
+			
+		}
+		catch(InterruptedException e) {}
+	}
+
+	//This function takes whatever image is stored in "inputImage" and processes it to find contours
+	void processImage()
+	{
+		//run process method in Pipeline class and find controus
+    	mPipeline.process(inputImage);
+    	
+		//Clear the list of contours
+		contours.clear();
+		
+		//sets the value of contours to pipeline output to be further processed
+    	contours = mPipeline.filterContoursOutput();
+	}
+	
+	void processTarget()
+	{
+		//Reset the number of found targets
+		targetsFound = 0;
+		
+		//If we have contours...
+		if (contours.size() > 0)
+		{
+			//Variables to cache values during the sorting process
+			int biggestAreaIndex = -1;
+			int secondBiggestAreaIndex = -1;
+			double largestArea = 0;
+			double secondLargestArea = 0;
+			RotatedRect currentRect = new RotatedRect();
+					
+			//Find the two largest rectangles and store them into their respective indices
+			for(int i = 0; i < contours.size(); i++)
+			{
+				//Make a rectangle that fits the current contours
+				currentRect = Imgproc.minAreaRect(new MatOfPoint2f(contours.get(i).toArray()));
+				
+				//Only process this rectangle if it is possibly a target
+				if(isPossibleTarget(currentRect))
+				{
+					//Store the current rectangle's area
+					double area = currentRect.size.area();
+					
+					//If this rectangle's area is greater than the current largest area...
+					if(area > largestArea)
+					{
+						//Save the previous largest rectangle as the second largest
+						secondBiggestAreaIndex = biggestAreaIndex;
+						secondLargestArea = largestArea;
+						
+						//Save the current rectangle as the largest
+						biggestAreaIndex = i;
+						largestArea = area;
+					}//If this area isn't the largest, but is largest than the current second largest...
+					else if(area > secondLargestArea)
+					{
+						//Save this rectangle as the second largest
+						secondLargestArea = area;
+						secondBiggestAreaIndex = i;
+					}
+				}
+			}
+			
+			//Store the largest rectangle
+			if(biggestAreaIndex >= 0)
+			{
+				target1 = Imgproc.minAreaRect(new MatOfPoint2f(contours.get(biggestAreaIndex).toArray()));
+				targetsFound++;
+				
+				targetDistance = calculateDistance(target1.boundingRect().width);
+			}
+			
+			//Store the second largest rectangle
+			if(secondBiggestAreaIndex >= 0)
+			{
+				target2 = Imgproc.minAreaRect(new MatOfPoint2f(contours.get(secondBiggestAreaIndex).toArray()));
+				targetsFound++;
+			}
+		}
+	}
+	
+	//This function draws ellipses over the tracked targets
+		void visionDebug()
+		{
+			Rect tg1 = target1.boundingRect();
+			Rect tg2 = target2.boundingRect();
+			
+			if(target1 != null)
+			{
+				Imgproc.ellipse(inputImage, target1, new Scalar(255, 0, 255), 3);
+				Imgproc.rectangle(inputImage, tg1.tl(), tg1.br(), new Scalar(255, 0, 255), 3);
+			}
+			
+			if(target2 != null)
+			{
+				Imgproc.ellipse(inputImage, target2, new Scalar(0, 0, 255), 3);
+				Imgproc.rectangle(inputImage, tg2.tl(), tg2.br(), new Scalar(255, 0, 255), 3);
+			}
+			
+			if(target1 != null && target2 != null) {
+				
+				//if target 1 is on the right
+				if(target1.center.x > target2.center.x){
+					Imgproc.rectangle(inputImage, tg1.br() , tg2.tl(), new Scalar(255, 0, 255), 3);
+				} 
+				//if target 1 is on the left
+				else  {
+					Imgproc.rectangle(inputImage, tg1.tl() , tg2.br(), new Scalar(255, 0, 255), 3);
+				}
+				
+			}
+			
+			//Put the processed image into the server so that the smartdashboard can view it
+			videoOut.putFrame(outputImage);
+		}
+	
+	//This function returns whether a rectangle could potentially be a target
+	boolean isPossibleTarget(RotatedRect rect)
+	{
+		return rect.size.area() > minTargetSize;
+	}
+	
+	
+	//This function calculates how far a target is from the camera
+	double calculateDistance(double targetSizeX)
+	{
+		//Convert the target's width from pixels to feet and halve that, since we're only going to be using half of the image
+		double targetWidthFt = targetSizeX * targetWidthConversion * 0.5;
+		
+		//Calculate the angle that the right-most edge of the target is from the center of a line extending straight from the camera
+		double targetAngle = Math.atan((targetWidthFt * Math.tan(cameraFOV * 0.5 * (Math.PI / 180.0))) / fovPlaneDistance);
+		
+		//Scale a triangle that fits the calculated target angle and has an end length of half the width of the target
+		return (targetWidth * 0.5) / Math.tan(targetAngle);
+	}
+	
+		//how much error will be allowed
+		double tolerance = 0;
+		int findDeviation(){
+			double center;
+			if(target1.center.x > target2.center.x){
+				center = target1.center.x - target2.center.x;		
+			}
+			else{
+				center = target2.center.x - target1.center.x;
+			}
+			if(Math.abs(center) < tolerance){
+				return 0;
+			}
+			return (int) (center - (inputImage.width() / 2)) / inputImage.width();
+		}
+		
+		
+		//adjust direction of bot relative to reflective tape
+		double[] visionPID(double a){
+			double r = 1 - a;
+			int x = 0, y = 0;
+			if(findDeviation() < 0){
+				x += findDeviation() * r;
+			}
+			else{
+				y += findDeviation() * r;
+			}
+			double[] z = new double[]{x,y};
+			return z;
+		}
+}
+
+
+
+
+
+

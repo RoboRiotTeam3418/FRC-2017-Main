@@ -1,19 +1,24 @@
 package com.team3418.frc2017.auto.actions;
 
-import com.team3418.frc2017.Constants;
 import com.team3418.frc2017.HardwareMap;
 import com.team3418.frc2017.subsystems.Drivetrain;
-
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class DriveStraightActionDistance implements Action {
 	
 	private double mDistanceSetPoint;
-	private double mGyroSetpoint;
+	private double mAngleSetpoint;
 	private double mEncoderCorrectionSpeed;
-	private double mGyroCorrectionSpeed;
-
+	private double mAngleCorrectionSpeed;
+	
+	private final double mLinearMaxSpeed;
+	private final double mLinearMinSpeed;
+	private final double mLinearDeadzone;
+	private final double mRotationalMaxSpeed;
+	private final double mRotationalMinSpeed;
+	private final double mRotationalDeadzone;
+	
 	private Drivetrain mDrivetrain;
 	private Encoder mEncoder;
 	private ADXRS450_Gyro mGyro;
@@ -24,7 +29,30 @@ public class DriveStraightActionDistance implements Action {
     	mGyro = HardwareMap.getInstance().mGyro;
     	
     	mDistanceSetPoint = distance;
-        mGyroSetpoint = mGyro.getAngle();
+    	mAngleSetpoint = mGyro.getAngle();
+    	
+    	mLinearMaxSpeed = .75;
+    	mLinearMinSpeed = .28;
+    	mLinearDeadzone = 1;
+    	mRotationalMaxSpeed = .5;
+    	mRotationalMinSpeed = .03;
+    	mRotationalDeadzone = .25;
+    }
+    
+    public DriveStraightActionDistance(double distance, double LinearMaxSpeed, double LinearMinSpeed, double LinearDeadzone, double RotationalMaxSpeed, double RotationalMinSpeed, double RotationalDeadzone) {
+    	mDrivetrain = Drivetrain.getInstance();
+    	mEncoder = Drivetrain.getInstance().mRightEncoder;
+    	mGyro = HardwareMap.getInstance().mGyro;
+    	
+    	mDistanceSetPoint = distance;
+    	mAngleSetpoint = mGyro.getAngle();
+    	
+    	mLinearMaxSpeed = LinearMaxSpeed;
+    	mLinearMinSpeed = LinearMinSpeed;
+    	mLinearDeadzone = LinearDeadzone;
+    	mRotationalMaxSpeed = RotationalMaxSpeed;
+    	mRotationalMinSpeed = RotationalMinSpeed;
+    	mRotationalDeadzone = RotationalDeadzone;
     }
     
     @Override
@@ -37,7 +65,7 @@ public class DriveStraightActionDistance implements Action {
     	calcEncoderSpeed();
     	calcGyroSpeed();
     	System.out.println("drivetrain speed = " + mEncoderCorrectionSpeed);
-		mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mGyroCorrectionSpeed, mEncoderCorrectionSpeed + -mGyroCorrectionSpeed);
+		mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mAngleCorrectionSpeed, mEncoderCorrectionSpeed + -mAngleCorrectionSpeed);
 	}
     
     @Override
@@ -56,7 +84,7 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private double calcGyroError() {
-		return mGyroSetpoint - mGyro.getAngle();
+		return mAngleSetpoint - mGyro.getAngle();
 	}
 	
 	private double calcEncoderError(){
@@ -64,45 +92,37 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private void calcGyroSpeed() {
-		mGyroCorrectionSpeed = calcGyroError() * .05;
-		if (mGyroCorrectionSpeed < Constants.kGyroMinSpeed && mGyroCorrectionSpeed > 0 ) {
-			mGyroCorrectionSpeed = Constants.kGyroMinSpeed;
+		mAngleCorrectionSpeed = calcGyroError() * .05;
+		if (mAngleCorrectionSpeed < mRotationalMinSpeed && mAngleCorrectionSpeed > 0 ) {
+			mAngleCorrectionSpeed = mRotationalMinSpeed;
+		} else if (mAngleCorrectionSpeed > -mRotationalMinSpeed && mAngleCorrectionSpeed < 0 ) {
+			mAngleCorrectionSpeed = -mRotationalMinSpeed;
 		}
 		
-		if (mGyroCorrectionSpeed > -Constants.kGyroMinSpeed && mGyroCorrectionSpeed < 0 ) {
-			mGyroCorrectionSpeed = -Constants.kGyroMinSpeed;
-		}
-		
-		if (mGyroCorrectionSpeed > Constants.kGyroMaxSpeed ) {
-			mGyroCorrectionSpeed = Constants.kGyroMaxSpeed;
-		}
-		
-		if (mGyroCorrectionSpeed < -Constants.kGyroMaxSpeed ) {
-			mGyroCorrectionSpeed = -Constants.kGyroMaxSpeed;
+		if (mAngleCorrectionSpeed > mRotationalMaxSpeed ) {
+			mAngleCorrectionSpeed = mRotationalMaxSpeed;
+		} else if (mAngleCorrectionSpeed < -mRotationalMaxSpeed ) {
+			mAngleCorrectionSpeed = -mRotationalMaxSpeed;
 		}
 	}
 	
 	private void calcEncoderSpeed() {
 		mEncoderCorrectionSpeed = calcEncoderError() * .5;
-		if (mEncoderCorrectionSpeed < Constants.kEncoderMinSpeed && mEncoderCorrectionSpeed > 0 ) {
-			mEncoderCorrectionSpeed = Constants.kEncoderMinSpeed;
+		if (mEncoderCorrectionSpeed < mLinearMinSpeed && mEncoderCorrectionSpeed > 0 ) {
+			mEncoderCorrectionSpeed = mLinearMinSpeed;
+		} else if (mEncoderCorrectionSpeed > -mLinearMinSpeed && mEncoderCorrectionSpeed < 0 ) {
+			mEncoderCorrectionSpeed = -mLinearMinSpeed;
 		}
 		
-		if (mEncoderCorrectionSpeed > -Constants.kEncoderMinSpeed && mEncoderCorrectionSpeed < 0 ) {
-			mEncoderCorrectionSpeed = -Constants.kEncoderMinSpeed;
-		}
-		
-		if (mEncoderCorrectionSpeed > Constants.kEncoderMaxSpeed) {
-			mEncoderCorrectionSpeed = Constants.kEncoderMaxSpeed;
-		}
-		
-		if (mEncoderCorrectionSpeed < -Constants.kEncoderMaxSpeed) {
-			mEncoderCorrectionSpeed = -Constants.kEncoderMaxSpeed;
+		if (mEncoderCorrectionSpeed > mLinearMaxSpeed) {
+			mEncoderCorrectionSpeed = mLinearMaxSpeed;
+		} else if (mEncoderCorrectionSpeed < -mLinearMaxSpeed) {
+			mEncoderCorrectionSpeed = -mLinearMaxSpeed;
 		}
 	}
 	
 	private boolean isGyroOnTarget() {
-		if (calcGyroError() < Constants.kGyroDeadzone && calcGyroError() > -Constants.kGyroDeadzone){
+		if (calcGyroError() < mRotationalDeadzone && calcGyroError() > -mRotationalDeadzone){
 			return true;
 		} else {
 			return false;
@@ -110,7 +130,7 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private boolean isEncoderOnTarget() {
-		if (calcEncoderError() < Constants.kEncoderDeadzone && calcEncoderError() > -Constants.kEncoderDeadzone) {
+		if (calcEncoderError() < mLinearDeadzone && calcEncoderError() > -mLinearDeadzone) {
 			System.out.println("encoder is on target");
 			return true;
 		} else {

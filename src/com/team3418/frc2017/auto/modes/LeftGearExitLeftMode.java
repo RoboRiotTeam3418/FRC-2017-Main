@@ -4,10 +4,10 @@ import com.team3418.frc2017.auto.AutoModeBase;
 import com.team3418.frc2017.auto.AutoModeEndedException;
 import com.team3418.frc2017.auto.actions.DriveStraightActionDistance;
 import com.team3418.frc2017.auto.actions.DriveStraightActionTime;
-import com.team3418.frc2017.auto.actions.TurnAction;
+import com.team3418.frc2017.auto.actions.TurnActionAngle;
 import com.team3418.frc2017.auto.actions.WaitAction;
 
-public class LeftGearExitLeft extends AutoModeBase {
+public class LeftGearExitLeftMode extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
@@ -18,14 +18,14 @@ public class LeftGearExitLeft extends AutoModeBase {
 		
 		
 		
-		runAction(new TurnAction(50));
+		runAction(new TurnActionAngle(50));
 		runAction(new DriveStraightActionTime(1.8, false));
 		
 		
 		runAction(new WaitAction(3));
 		runAction(new DriveStraightActionTime(3, true));
 		runAction(new WaitAction(.5));
-		runAction(new TurnAction(120));
+		runAction(new TurnActionAngle(120));
 		runAction(new WaitAction(1));
 		runAction(new DriveStraightActionDistance(-10));
 		
