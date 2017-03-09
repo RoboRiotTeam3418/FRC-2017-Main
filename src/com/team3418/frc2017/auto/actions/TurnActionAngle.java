@@ -11,7 +11,6 @@ public class TurnActionAngle implements Action {
 	private int errorCounts;
 	private final int requiredErrorCounts;
 	
-	private final double allowableAngleError;
 	private final double mRotationalMaxSpeed;
 	private final double mRotationalMinSpeed;
 	private final double mRotationalDeadzone;
@@ -29,7 +28,6 @@ public class TurnActionAngle implements Action {
     	mRotationalDeadzone = .25;
     	errorCounts = 0;
     	requiredErrorCounts = 50;
-    	allowableAngleError = 1;
     }
     
     public TurnActionAngle(double angle, double RotationalMaxSpeed, double RotationalMinSpeed, double RotationalDeadzone) {
@@ -38,7 +36,6 @@ public class TurnActionAngle implements Action {
         mAngleSetpoint = mGyro.getAngle() + angle;
         errorCounts = 0;
     	requiredErrorCounts = 50;
-    	allowableAngleError = 1;
         
         mRotationalMaxSpeed = RotationalMaxSpeed;
     	mRotationalMinSpeed = RotationalMinSpeed;
@@ -91,7 +88,7 @@ public class TurnActionAngle implements Action {
 	}
 	
 	private boolean isGyroOnTarget() {
-		if( Math.abs(calcGyroError() - mGyro.getAngle()) < allowableAngleError)
+		if( Math.abs(calcGyroError()) < mRotationalDeadzone)
 		{
 			//Increase the number counts within the error
 			errorCounts++;

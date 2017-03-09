@@ -11,6 +11,8 @@ public class DriveStraightActionDistance implements Action {
 	private double mAngleSetpoint;
 	private double mEncoderCorrectionSpeed;
 	private double mAngleCorrectionSpeed;
+	private int errorCounts;
+	private final int requiredErrorCounts;
 	
 	private final double mLinearMaxSpeed;
 	private final double mLinearMinSpeed;
@@ -30,6 +32,8 @@ public class DriveStraightActionDistance implements Action {
     	
     	mDistanceSetPoint = distance;
     	mAngleSetpoint = mGyro.getAngle();
+    	errorCounts = 0;
+    	requiredErrorCounts = 50;
     	
     	mLinearMaxSpeed = .75;
     	mLinearMinSpeed = .28;
@@ -46,6 +50,8 @@ public class DriveStraightActionDistance implements Action {
     	
     	mDistanceSetPoint = distance;
     	mAngleSetpoint = mGyro.getAngle();
+    	errorCounts = 0;
+    	requiredErrorCounts = 50;
     	
     	mLinearMaxSpeed = LinearMaxSpeed;
     	mLinearMinSpeed = LinearMinSpeed;
@@ -122,7 +128,7 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private boolean isGyroOnTarget() {
-		if (calcGyroError() < mRotationalDeadzone && calcGyroError() > -mRotationalDeadzone){
+		if (Math.abs(calcGyroError()) < mRotationalDeadzone){
 			return true;
 		} else {
 			return false;
@@ -130,8 +136,18 @@ public class DriveStraightActionDistance implements Action {
 	}
 	
 	private boolean isEncoderOnTarget() {
-		if (calcEncoderError() < mLinearDeadzone && calcEncoderError() > -mLinearDeadzone) {
-			System.out.println("encoder is on target");
+		if( Math.abs(calcEncoderError()) < mLinearDeadzone)
+		{
+			//Increase the number counts within the error
+			errorCounts++;
+		} else {
+			//We're not there yet, so reset the counter
+			errorCounts = 0;
+		}
+		//If we've been within the error for long enough...
+		if(errorCounts >= requiredErrorCounts)
+		{
+			//We're done!
 			return true;
 		} else {
 			return false;
