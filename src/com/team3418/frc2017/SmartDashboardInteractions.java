@@ -50,17 +50,17 @@ public class SmartDashboardInteractions {
     
     //enum to hold all possible auto modes
     enum AutonOption {
-        MIDDLE_GEAR_EXIT_LEFT("middle gear exit left", new MiddleGearExitLeftMode()), //
-        MIDDLE_GEAR_EXIT_RIGHT("middle gear exit right", new MiddleGearExitRightMode()), //
-        MIDDLE_GEAR_STAY("middle gear stay", new MiddleGearStayMode()), //
-        LEFT_GEAR_EXIT_LEFT("left gear exit left", new LeftGearExitLeftMode()), //
-        LEFT_GEAR_EXIT_RIGHT("left gear exit right", new LeftGearExitRightMode()), //
-        LEFT_GEAR_STAY("left gear stay", new LeftGearStayMode()), //
-        RIGHT_GEAR_EXIT_LEFT("right gear exit left", new RightGearExitRightMode()), //
-        RIGHT_GEAR_EXIT_RIGHT("right gear exit right", new RightGearExitRightMode()), //
-        RIGHT_GEAR_STAY("right gear stay", new RightGearStayMode()), //
-        STAND_STILL("stand still", new StandStillMode()),//
-    	TEST("test (do not use at comp)", new TestMode()); //
+        MIDDLE_GEAR_EXIT_LEFT("1. middle gear exit left", new MiddleGearExitLeftMode()), //
+        MIDDLE_GEAR_EXIT_RIGHT("2. middle gear exit right", new MiddleGearExitRightMode()), //
+        MIDDLE_GEAR_STAY("3. middle gear stay", new MiddleGearStayMode()), //
+        LEFT_GEAR_EXIT_LEFT("4. left gear exit left", new LeftGearExitLeftMode()), //
+        LEFT_GEAR_EXIT_RIGHT("5. left gear exit right", new LeftGearExitRightMode()), //
+        LEFT_GEAR_STAY("6. left gear stay", new LeftGearStayMode()), //
+        RIGHT_GEAR_EXIT_LEFT("7. right gear exit left", new RightGearExitRightMode()), //
+        RIGHT_GEAR_EXIT_RIGHT("8. right gear exit right", new RightGearExitRightMode()), //
+        RIGHT_GEAR_STAY("9. right gear stay", new RightGearStayMode()), //
+        STAND_STILL("10. stand still", new StandStillMode()),//
+    	TEST("11. test (do not use at comp)", new TestMode()); //
         
     	
     	

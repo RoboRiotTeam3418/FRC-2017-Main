@@ -1,13 +1,15 @@
 package com.team3418.frc2017;
 
+
 import com.team3418.frc2017.auto.AutoExecuter;
 import com.team3418.frc2017.auto.modes.LeftGearExitLeftMode;
-import com.team3418.frc2017.auto.modes.MiddleGearExitLeftMode;
+import com.team3418.frc2017.plugins.MinionVision;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -16,6 +18,7 @@ public class Robot extends IterativeRobot {
 	HardwareMap mHardwareMap;
 	ControlBoard mControlBoard;
 	SmartDashboardInteractions mSmartDashboardInteractions;
+	//MinionVision mMinionVision;
 	
 	//initialize subsystems
 	Agitator mAgitator;
@@ -47,9 +50,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
+		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
 		mSmartDashboardInteractions = new SmartDashboardInteractions();
+		//mMinionVision = new MinionVision();
 		
 		mAgitator = Agitator.getInstance();
 		mClimber = Climber.getInstance();
@@ -72,6 +77,7 @@ public class Robot extends IterativeRobot {
         
         mAutoExecuter = new AutoExecuter();
         mAutoExecuter.setAutoRoutine(mSmartDashboardInteractions.getSelectedAutonMode());
+        //mAutoExecuter.setAutoRoutine(new LeftGearExitLeftMode());
         mAutoExecuter.start();
 		
 		stopAllSubsystems();
@@ -95,6 +101,7 @@ public class Robot extends IterativeRobot {
         }
         mAutoExecuter = null;
         
+        //mMinionVision.stopVision();
         mDrivetrain.resetEncoders();
 		
 		stopAllSubsystems();
@@ -113,6 +120,8 @@ public class Robot extends IterativeRobot {
             mAutoExecuter.stop();
         }
         mAutoExecuter = null;
+        
+        //mMinionVision.startVision();
         
 		stopAllSubsystems();
 		mDrivetrain.lowGear();
@@ -205,7 +214,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		
-		System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
+		//System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
 		
 		//System.out.println(Math.random());
 		

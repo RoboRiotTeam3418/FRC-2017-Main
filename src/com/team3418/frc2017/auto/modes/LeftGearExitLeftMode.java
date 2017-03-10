@@ -19,15 +19,15 @@ public class LeftGearExitLeftMode extends AutoModeBase {
 		
 		
 		runAction(new TurnActionAngle(50));
-		runAction(new DriveStraightActionTime(1.8, false));
+		runAction(new DriveStraightActionTime(1, false));
 		
 		
 		runAction(new WaitAction(3));
-		runAction(new DriveStraightActionTime(3, true));
+		runAction(new DriveStraightActionTime(1.5, true));
 		runAction(new WaitAction(.5));
 		runAction(new TurnActionAngle(120));
 		runAction(new WaitAction(1));
-		runAction(new DriveStraightActionDistance(-10));
+		runAction(new DriveStraightActionDistance(-20));
 		
 	}
 	

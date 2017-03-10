@@ -24,14 +24,18 @@ public class MinionVision {
 	
 	//This function starts the vision thread
 	public void startVision()
-	{		//If there is no instance of the vision thread...
+	{	//If there is no instance of the vision thread...
 		if(visionThread == null)
 		{
+			System.out.println("visionthread = null (creating new thread)");
 			//Create a new instance of the vision thread
 			visionThread = new VisionThread(30);
 		}
 		//Actually run the thread
-		visionThread.start();
+		if (visionThread != null){
+			System.out.println("starting vision");
+			visionThread.start();
+		}
 	}
 	
 	//This function stops the vision thread
@@ -40,6 +44,7 @@ public class MinionVision {
 		//If an instance of the vision thread exists...
 		if(visionThread != null)
 		{	
+			System.out.println("stopping vision");
 			//Interrupt the vision thread - this sets the Thread.interrupted() parameter to true
 			visionThread.interrupt();
 		}
@@ -47,62 +52,62 @@ public class MinionVision {
 	
 	
 	//This function returns the width of the current largest rectangle being tracked
-		public double getRectangleWidth()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.target1.boundingRect().width;
+	public double getRectangleWidth()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.target1.boundingRect().width;
+		
+		return 0;
+	}
+	
+	//This function returns the area of the current largest rectangle being tracked
+	public double getRectangleArea()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.target1.size.area();
 			
-			return 0;
-		}
-		
-		//This function returns the area of the current largest rectangle being tracked
-		public double getRectangleArea()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.target1.size.area();
-				
-			return 0;
-		}
-		
-		//This function returns the aspect ratio of the current largest rectangle being tracked
-		public double getRectangleAspect()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.target1.size.width / visionThread.target1.size.height;
-				
-			return 0;
-		}
-		
-		//This function returns the distance that the currently tracked target is from the camera
-		public double getTargetDistanceFromCamera()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.targetDistance;
-				
-			return 0;
-		}
-		
-		//This function returns the x screen position of the currently tracked target
-		public double getTargetScreenX()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.target1.boundingRect().x;
-				
-			return 0;
-		}
-		
-		//This function returns the y screen position of the currently tracked target
-		public double getTargetScreenY()
-		{
-			if(visionThread != null && visionThread.targetsFound > 0)
-				return visionThread.target1.boundingRect().y;
-				
-			return 0;
-		}
-		
-		public double[] getVisionShift(double power){
-			return visionThread.visionPID(power);
-		}
+		return 0;
+	}
+	
+	//This function returns the aspect ratio of the current largest rectangle being tracked
+	public double getRectangleAspect()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.target1.size.width / visionThread.target1.size.height;
+			
+		return 0;
+	}
+	
+	//This function returns the distance that the currently tracked target is from the camera
+	public double getTargetDistanceFromCamera()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.targetDistance;
+			
+		return 0;
+	}
+	
+	//This function returns the x screen position of the currently tracked target
+	public double getTargetScreenX()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.target1.boundingRect().x;
+			
+		return 0;
+	}
+	
+	//This function returns the y screen position of the currently tracked target
+	public double getTargetScreenY()
+	{
+		if(visionThread != null && visionThread.targetsFound > 0)
+			return visionThread.target1.boundingRect().y;
+			
+		return 0;
+	}
+	
+	public double[] getVisionShift(double power){
+		return visionThread.visionPID(power);
+	}
 }
 
 class VisionThread extends Thread {
@@ -130,11 +135,11 @@ class VisionThread extends Thread {
 	Mat inputImage;
 	Mat outputImage;
 	
-	//list of contorus to store pipeline output
+	//list of contours to store pipeline output
 	List<MatOfPoint> contours;
 	
 	//pipeline to send images through to be processed
-	Pipeline mPipeline = new Pipeline();
+	Pipeline mPipeline;
 	
 	//The time (in milliseconds) that the vision thread should wait
 	int threadWait;
@@ -149,6 +154,7 @@ class VisionThread extends Thread {
 	//Called when an instance of this class is created
 	public VisionThread (double framerate)
 	{	
+		System.out.println("creating visionthread");
 		//camera setup
 		camera = new UsbCamera("camera1", 0);
         camera.setResolution(320, 240);
@@ -157,9 +163,12 @@ class VisionThread extends Thread {
         camera.setExposureManual(20);
         camera.setWhiteBalanceManual(4000);
         
+        
         //sink / source setup
         videoIn = CameraServer.getInstance().getVideo(camera);
+        videoIn.setEnabled(true);
         videoOut = CameraServer.getInstance().putVideo("GearCam", 320, 240);
+        
         
         //References to hold images
     	inputImage = new Mat();
@@ -179,7 +188,7 @@ class VisionThread extends Thread {
 		
 		//Calculate how long the thread should wait given a frequency (and ensure it waits at least 1 ms)
 		threadWait = Math.max((int)(Math.round(1.0 / framerate)) * 1000, 1);
-		}
+	}
 
 	
 	//This function is run on a separate thread when the visionThread.start() method is called
@@ -189,28 +198,26 @@ class VisionThread extends Thread {
 		try
 		{	
 			//Loop until this thread is interrupted
+			 
+			 
 			while(!Thread.interrupted())
 			{				
 				//Get the most recent image from the camera and store it
 				videoIn.grabFrame(inputImage);
-				
 				//Process the camera's image
 				processImage();
-				
 				//Process the target
-				processTarget();
-				
+				processTarget();				
 				//Draws rectangles over the two tracked targets for debugging
-				visionDebug();
-				
+				visionDebug();				
 				//Have this thread wait for some time
 				Thread.sleep(Math.max(threadWait / 2, 1));
 			}
 			
 		}
 		catch(InterruptedException e) {}
-	}
-
+		}
+	
 	//This function takes whatever image is stored in "inputImage" and processes it to find contours
 	void processImage()
 	{
@@ -222,6 +229,8 @@ class VisionThread extends Thread {
 		
 		//sets the value of contours to pipeline output to be further processed
     	contours = mPipeline.filterContoursOutput();
+    	
+		outputImage = inputImage.clone();
 	}
 	
 	void processTarget()
@@ -230,6 +239,7 @@ class VisionThread extends Thread {
 		targetsFound = 0;
 		
 		//If we have contours...
+		System.out.println(contours.size());
 		if (contours.size() > 0)
 		{
 			//Variables to cache values during the sorting process
@@ -292,36 +302,33 @@ class VisionThread extends Thread {
 	//This function draws ellipses over the tracked targets
 		void visionDebug()
 		{
-			Rect tg1 = target1.boundingRect();
-			Rect tg2 = target2.boundingRect();
 			
 			if(target1 != null)
 			{
-				Imgproc.ellipse(inputImage, target1, new Scalar(255, 0, 255), 3);
-				Imgproc.rectangle(inputImage, tg1.tl(), tg1.br(), new Scalar(255, 0, 255), 3);
+				Imgproc.rectangle(inputImage, target1.boundingRect().tl(), target1.boundingRect().br(), new Scalar(255, 0, 255), 3);
 			}
 			
 			if(target2 != null)
 			{
-				Imgproc.ellipse(inputImage, target2, new Scalar(0, 0, 255), 3);
-				Imgproc.rectangle(inputImage, tg2.tl(), tg2.br(), new Scalar(255, 0, 255), 3);
+				Imgproc.rectangle(inputImage, target2.boundingRect().tl(), target2.boundingRect().br(), new Scalar(255, 0, 255), 3);
 			}
 			
+			/*
 			if(target1 != null && target2 != null) {
 				
 				//if target 1 is on the right
 				if(target1.center.x > target2.center.x){
-					Imgproc.rectangle(inputImage, tg1.br() , tg2.tl(), new Scalar(255, 0, 255), 3);
-				} 
+					Imgproc.rectangle(inputImage, target1.boundingRect().br() , target2.boundingRect().tl(), new Scalar(255, 0, 255), 3);
+				}
 				//if target 1 is on the left
 				else  {
-					Imgproc.rectangle(inputImage, tg1.tl() , tg2.br(), new Scalar(255, 0, 255), 3);
+					Imgproc.rectangle(inputImage, target1.boundingRect().tl() , target2.boundingRect().br(), new Scalar(255, 0, 255), 3);
 				}
-				
 			}
+			*/
 			
 			//Put the processed image into the server so that the smartdashboard can view it
-			videoOut.putFrame(outputImage);
+			videoOut.putFrame(inputImage);			
 		}
 	
 	//This function returns whether a rectangle could potentially be a target
