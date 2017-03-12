@@ -38,7 +38,7 @@ public class Pipeline {
 		Mat hslThresholdInput = blurOutput;
 		double[] hslThresholdHue = {74.4, 84.5};
 		double[] hslThresholdSaturation = {215.5, 255.0};
-		double[] hslThresholdLuminance = {71.0, 134.7};
+		double[] hslThresholdLuminance = {71.0, 134.7};//134.7
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step Find_Contours0:

@@ -35,7 +35,7 @@ public class Constants {
     
 	//Climber
 	public static double kClimberReverseSpeed = -.5;
-	public static double kClimberHoldSpeed = .35;
+	public static double kClimberHoldSpeed = .40;
 	
 	//shooter
 	public static double kTargetShooterRpm = 1550;

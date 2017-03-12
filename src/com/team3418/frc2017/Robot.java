@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot {
 	HardwareMap mHardwareMap;
 	ControlBoard mControlBoard;
 	SmartDashboardInteractions mSmartDashboardInteractions;
-	//MinionVision mMinionVision;
+	MinionVision mMinionVision;
 	
 	//initialize subsystems
 	Agitator mAgitator;
@@ -54,7 +54,8 @@ public class Robot extends IterativeRobot {
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
 		mSmartDashboardInteractions = new SmartDashboardInteractions();
-		//mMinionVision = new MinionVision();
+		mMinionVision = MinionVision.getInstance();
+		mMinionVision.startVision();
 		
 		mAgitator = Agitator.getInstance();
 		mClimber = Climber.getInstance();
@@ -130,6 +131,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
+		//System.out.println("target width = " + mMinionVision.getCombinedTargetWidth() + " target distance = " + mMinionVision.getTargetDistanceFromCamera());
 		
 		//intake
 		if(mControlBoard.getSecondaryIntakeButton()) {

@@ -10,14 +10,19 @@ import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 
 public class MinionVision {
-
+	
+	static MinionVision mInstance = new MinionVision();
+	
+	public static MinionVision getInstance() {
+		return mInstance;
+	}
+	
 	VisionThread visionThread;
 	
 	public MinionVision() {
@@ -46,7 +51,17 @@ public class MinionVision {
 		}
 	}
 	
-	/*
+	
+	public double getCombinedTargetX() {
+		return visionThread.combinedTargetCenter;
+	}
+	
+	public double getCombinedTargetWidth() {
+		return visionThread.combinedTarget.width;
+	}
+	
+	
+	
 	public double getRectangleWidth()
 	{
 		if(visionThread != null && visionThread.targetsFound > 0)
@@ -71,6 +86,7 @@ public class MinionVision {
 		return 0;
 	}
 	
+	/*
 	public double getTargetDistanceFromCamera()
 	{
 		if(visionThread != null && visionThread.targetsFound > 0)
@@ -78,6 +94,7 @@ public class MinionVision {
 			
 		return 0;
 	}
+	*/
 	
 	public double getTargetScreenX()
 	{
@@ -95,10 +112,6 @@ public class MinionVision {
 		return 0;
 	}
 	
-	public double[] getVisionShift(double power){
-		return visionThread.visionPID(power);
-	}
-	*/
 }
 
 class VisionThread extends Thread {
@@ -106,14 +119,15 @@ class VisionThread extends Thread {
 	//Target filtering variables
 	final double minTargetSize = 5; //The minimum area a rectangle has to take up on-screen to be considered as a target
 	
+	/*
 	//Variables for calculating target distance
 	//To use distance calculation correctly, you must measure the width of a target (in pixels) from a known distance away from the camera
 	final double cameraFOV = 60; //The horizontal FOV of the camera (in degrees)
 	final double fovPlaneDistance = 5; //The distance from the camera that the target's size was measured (in feet)
-	final double targetWidth = 10.0 / 12.0; //The width of the target (this should be the width of the area actually seen by the camera)
-	final double targetWidthPixels = 61; //The width of the target on-screen measured at "fovPlaneDistance" away from the camera (in pixels)
+	final double targetWidth = 10.0; //The width of the target (this should be the width of the area actually seen by the camera)
+	final double targetWidthPixels = 35; //The width of the target on-screen measured at "fovPlaneDistance" away from the camera (in pixels)
 	final double targetWidthConversion = targetWidth / targetWidthPixels; //This creates a conversion to convert target width from pixels to feet
-	final double gearTargetWidth = 0;
+	*/
 	UsbCamera camera;
 	CvSink cvSink; //video in source
 	CvSource cvSource; //video output
@@ -127,11 +141,14 @@ class VisionThread extends Thread {
 	//The time (in milliseconds) that the vision thread should wait
 	int threadWait;
 	
+	
 	//These are variables returned by the vision system
 	//Since this class is being executed on a separate thread, they have to be volatile to make sure no conflicts arise when another script tries to access them
 	public volatile RotatedRect target1;
 	public volatile RotatedRect target2;
-	public volatile Rect mCombinedTarget;
+	public volatile Rect combinedTarget;
+	public volatile double combinedTargetCenter;
+	
 	public volatile int targetsFound;
 	public volatile double targetDistance;
 	
@@ -157,7 +174,8 @@ class VisionThread extends Thread {
 		
 		target1 = new RotatedRect();
 		target2 = new RotatedRect();
-		mCombinedTarget = new Rect();
+		combinedTarget = new Rect();
+		combinedTargetCenter = 0;
 		targetsFound = 0;
 		
 		threadWait = Math.max((int)(Math.round(1.0 / framerate)) * 1000, 1);
@@ -195,7 +213,6 @@ class VisionThread extends Thread {
 	{
 		targetsFound = 0;
 		
-		System.out.println(contours.size());
 		if (contours.size() > 0)
 		{
 			int biggestAreaIndex = -1;
@@ -233,7 +250,7 @@ class VisionThread extends Thread {
 				target1 = Imgproc.minAreaRect(new MatOfPoint2f(contours.get(biggestAreaIndex).toArray()));
 				targetsFound++;
 				
-				targetDistance = calculateDistance(target1.boundingRect().width);
+				//targetDistance = calculateDistance(combinedTarget.width);
 			}
 			
 			if(secondBiggestAreaIndex >= 0)
@@ -266,20 +283,20 @@ class VisionThread extends Thread {
 				//if target 1 is on the right
 				if(target1.center.x > target2.center.x){
 					Imgproc.rectangle(image, tg1br, tg2tl, new Scalar(100, 100, 255), 1);
-					mCombinedTarget = new Rect(tg1br, tg2tl);
+					combinedTarget = new Rect(tg1br, tg2tl);
 				}
 				//if target 1 is on the left
 				else {
 					Imgproc.rectangle(image, tg1tl, tg2br, new Scalar(100, 100, 255), 1);
-					mCombinedTarget = new Rect(tg1tl, tg2br);
+					combinedTarget = new Rect(tg1tl, tg2br);
 				}
 			}
 			
 			
-			double centerofrect = (mCombinedTarget.tl().x + mCombinedTarget.br().x)*0.5;
-			Imgproc.circle(image, new Point(centerofrect, 120), 0, new Scalar(43, 249, 32), 5);
+			combinedTargetCenter = (combinedTarget.tl().x + combinedTarget.br().x)*0.5;
+			Imgproc.circle(image, new Point(combinedTargetCenter, 120), 0, new Scalar(43, 249, 32), 5);
 			Imgproc.circle(image, new Point(160, 120), 0, new Scalar(240, 0, 0), 5);
-			Imgproc.line(image, new Point(centerofrect, 120), new Point(160, 120), new Scalar(43, 249, 32), 2);
+			Imgproc.line(image, new Point(combinedTargetCenter, 120), new Point(160, 120), new Scalar(43, 249, 32), 2);
 			
 			
 			cvSource.putFrame(image);
@@ -290,7 +307,7 @@ class VisionThread extends Thread {
 		return rect.size.area() > minTargetSize;
 	}
 	
-	
+	/*
 	double calculateDistance(double targetSizeX)
 	{
 		double targetWidthFt = targetSizeX * targetWidthConversion * 0.5;
@@ -299,35 +316,5 @@ class VisionThread extends Thread {
 		
 		return (targetWidth * 0.5) / Math.tan(targetAngle);
 	}
-	
-	
-	/*
-		double tolerance = 0;
-		int findDeviation(){
-			double center;
-			if(target1.center.x > target2.center.x){
-				center = target1.center.x - target2.center.x;		
-			}
-			else{
-				center = target2.center.x - target1.center.x;
-			}
-			if(Math.abs(center) < tolerance){
-				return 0;
-			}
-			return (int) (center - (image.width() / 2)) / image.width();
-		}
-		
-		double[] visionPID(double a){
-			double r = 1 - a;
-			int x = 0, y = 0;
-			if(findDeviation() < 0){
-				x += findDeviation() * r;
-			}
-			else{
-				y += findDeviation() * r;
-			}
-			double[] z = new double[]{x,y};
-			return z;
-		}
 	*/
 }

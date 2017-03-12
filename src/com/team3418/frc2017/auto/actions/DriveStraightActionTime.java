@@ -67,7 +67,7 @@ public class DriveStraightActionTime implements Action {
     
     @Override
 	public boolean isFinished() {
-		if (((mCurrentTime - mStartTime) > mTimeToWait)) {
+		if ((mCurrentTime - mStartTime) > mTimeToWait) {
 			return true;
 		}
 		return false;
