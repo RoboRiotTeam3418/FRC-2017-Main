@@ -2,13 +2,19 @@ package com.team3418.frc2017.auto.modes;
 
 import com.team3418.frc2017.auto.AutoModeBase;
 import com.team3418.frc2017.auto.AutoModeEndedException;
+import com.team3418.frc2017.auto.actions.CameraAlign;
+import com.team3418.frc2017.auto.actions.DriveStraightActionDistance;
+import com.team3418.frc2017.auto.actions.DriveStraightActionTime;
+import com.team3418.frc2017.auto.actions.TurnActionAngle;
 
 public class RightGearStayMode extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		// TODO Auto-generated method stub
-		
+		runAction(new DriveStraightActionDistance(-100));
+		runAction(new TurnActionAngle(-50));
+		runAction(new CameraAlign());
+		runAction(new DriveStraightActionTime(2, false));		
 	}
 
 }

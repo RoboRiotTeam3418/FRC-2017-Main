@@ -23,9 +23,16 @@ public class TurnActionAngle implements Action {
     	mGyro = HardwareMap.getInstance().mGyro;
         mAngleSetpoint = mGyro.getAngle() + angle;
         
+        /*
         mRotationalMaxSpeed = .75;
     	mRotationalMinSpeed = .4;
     	mRotationalDeadzone = 1.75;
+    	*/
+        
+        mRotationalMaxSpeed = .65;
+    	mRotationalMinSpeed = .35;
+    	mRotationalDeadzone = 1.5;
+    	
     	errorCounts = 0;
     	requiredErrorCounts = 50;
     }
@@ -73,7 +80,7 @@ public class TurnActionAngle implements Action {
 	}
 	
 	private void calcGyroSpeed() {
-		mAngleCorrectionSpeed = calcGyroError() * .07;
+		mAngleCorrectionSpeed = calcGyroError() * .2;
 		if (mAngleCorrectionSpeed < mRotationalMinSpeed && mAngleCorrectionSpeed > 0 ) {
 			mAngleCorrectionSpeed = mRotationalMinSpeed;
 		} else if (mAngleCorrectionSpeed > -mRotationalMinSpeed && mAngleCorrectionSpeed < 0 ) {

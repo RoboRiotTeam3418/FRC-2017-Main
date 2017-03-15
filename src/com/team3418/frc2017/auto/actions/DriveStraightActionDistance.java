@@ -35,7 +35,7 @@ public class DriveStraightActionDistance implements Action {
     	errorCounts = 0;
     	requiredErrorCounts = 50;
     	
-    	mLinearMaxSpeed = .75;
+    	mLinearMaxSpeed = 1;
     	mLinearMinSpeed = .28;
     	mLinearDeadzone = 1;
     	mRotationalMaxSpeed = .5;
@@ -70,8 +70,8 @@ public class DriveStraightActionDistance implements Action {
 	public void update() {
     	calcEncoderSpeed();
     	calcGyroSpeed();
-    	System.out.println("drivetrain speed = " + mEncoderCorrectionSpeed);
-		mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mAngleCorrectionSpeed, mEncoderCorrectionSpeed + -mAngleCorrectionSpeed);
+    	System.out.println(calcGyroError());
+    	mDrivetrain.setTankDriveSpeed(mEncoderCorrectionSpeed + mAngleCorrectionSpeed, mEncoderCorrectionSpeed + -mAngleCorrectionSpeed);
 	}
     
     @Override

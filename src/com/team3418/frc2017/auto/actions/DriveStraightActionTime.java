@@ -35,7 +35,7 @@ public class DriveStraightActionTime implements Action {
     	mRotationalDeadzone = .25;
     }
     
-    public DriveStraightActionTime(double time, boolean isForward, double LinearSpeed, double RotationalMaxSpeed, double RotationalMinSpeed, double RotationalDeadzone) {
+    public DriveStraightActionTime(double time, boolean isForward, double LinearSpeed) {
     	mDrivetrain = Drivetrain.getInstance();
     	mGyro = HardwareMap.getInstance().mGyro;
         mAngleSetpoint = mGyro.getAngle();
@@ -43,9 +43,9 @@ public class DriveStraightActionTime implements Action {
         mIsForward = isForward;
         mTimeToWait = time;
         mLinearSpeed = LinearSpeed;
-        mRotationalMaxSpeed = RotationalMaxSpeed;
-    	mRotationalMinSpeed = RotationalMinSpeed;
-    	mRotationalDeadzone = RotationalDeadzone;
+        mRotationalMaxSpeed = .5;
+    	mRotationalMinSpeed = .03;
+    	mRotationalDeadzone = .25;
     }
     
     @Override
