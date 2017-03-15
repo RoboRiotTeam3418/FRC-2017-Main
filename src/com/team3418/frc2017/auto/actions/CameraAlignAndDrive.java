@@ -77,8 +77,10 @@ public class CameraAlignAndDrive implements Action {
     	}
     	
     	if (mReadyToDrive == true) {
+    		/*
     		mDrivetrain.setTankDriveSpeed(mLinearSpeed + mAngleCorrectionSpeed, mLinearSpeed + -mAngleCorrectionSpeed);
     		mTimeElapsed = Timer.getFPGATimestamp() - mStartTime;
+    		*/
     	} else {
     		mDrivetrain.setTankDriveSpeed(mCameraCorrectionSpeed,-mCameraCorrectionSpeed);
     		mStartTime = Timer.getFPGATimestamp();

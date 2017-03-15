@@ -131,7 +131,6 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-		//System.out.println("target width = " + mMinionVision.getCombinedTargetWidth() + " target distance = " + mMinionVision.getTargetDistanceFromCamera());
 		
 		//intake
 		if(mControlBoard.getSecondaryIntakeButton()) {
@@ -214,7 +213,7 @@ public class Robot extends IterativeRobot {
 		//---------------------------------------------------
 		
 		
-		
+		System.out.println(mMinionVision.getCombinedTargetX()-160);
 		
 		//System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
 		
