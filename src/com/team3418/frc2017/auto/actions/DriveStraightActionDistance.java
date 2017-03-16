@@ -7,58 +7,42 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class DriveStraightActionDistance implements Action {
 	
+	private Drivetrain mDrivetrain = Drivetrain.getInstance();
+	private Encoder mEncoder = Drivetrain.getInstance().mRightEncoder;
+	private ADXRS450_Gyro mGyro = HardwareMap.getInstance().mGyro;
+	
 	private double mDistanceSetPoint;
-	private double mAngleSetpoint;
+	private double mAngleSetpoint = mGyro.getAngle();
 	private double mEncoderCorrectionSpeed;
 	private double mAngleCorrectionSpeed;
-	private int errorCounts;
-	private final int requiredErrorCounts;
+	private int mErrorCounts = 0;
+	private int mRequiredErrorCounts = 50;
 	
-	private final double mLinearMaxSpeed;
-	private final double mLinearMinSpeed;
-	private final double mLinearDeadzone;
-	private final double mRotationalMaxSpeed;
-	private final double mRotationalMinSpeed;
-	private final double mRotationalDeadzone;
-	
-	private Drivetrain mDrivetrain;
-	private Encoder mEncoder;
-	private ADXRS450_Gyro mGyro;
+	private double mLinearMaxSpeed = 1;
+	private double mLinearMinSpeed = .28;
+	private double mLinearDeadzone = 1;
+	private double mRotationalMaxSpeed = .5;
+	private double mRotationalMinSpeed = .03;	
 	
     public DriveStraightActionDistance(double distance) {
-    	mDrivetrain = Drivetrain.getInstance();
-    	mEncoder = Drivetrain.getInstance().mRightEncoder;
-    	mGyro = HardwareMap.getInstance().mGyro;
-    	
     	mDistanceSetPoint = distance;
-    	mAngleSetpoint = mGyro.getAngle();
-    	errorCounts = 0;
-    	requiredErrorCounts = 50;
-    	
-    	mLinearMaxSpeed = 1;
-    	mLinearMinSpeed = .28;
-    	mLinearDeadzone = 1;
-    	mRotationalMaxSpeed = .5;
-    	mRotationalMinSpeed = .03;
-    	mRotationalDeadzone = .25;
     }
     
-    public DriveStraightActionDistance(double distance, double LinearMaxSpeed, double LinearMinSpeed, double LinearDeadzone, double RotationalMaxSpeed, double RotationalMinSpeed, double RotationalDeadzone) {
-    	mDrivetrain = Drivetrain.getInstance();
-    	mEncoder = Drivetrain.getInstance().mRightEncoder;
-    	mGyro = HardwareMap.getInstance().mGyro;
-    	
+    public DriveStraightActionDistance(double distance, double maxSpeed) {
     	mDistanceSetPoint = distance;
-    	mAngleSetpoint = mGyro.getAngle();
-    	errorCounts = 0;
-    	requiredErrorCounts = 50;
-    	
-    	mLinearMaxSpeed = LinearMaxSpeed;
-    	mLinearMinSpeed = LinearMinSpeed;
-    	mLinearDeadzone = LinearDeadzone;
-    	mRotationalMaxSpeed = RotationalMaxSpeed;
-    	mRotationalMinSpeed = RotationalMinSpeed;
-    	mRotationalDeadzone = RotationalDeadzone;
+    	mLinearMaxSpeed = maxSpeed;
+    }
+    
+    public DriveStraightActionDistance(double distance, double maxSpeed, double deadzone) {
+    	mDistanceSetPoint = distance;
+    	mLinearMaxSpeed = maxSpeed;
+    	mLinearDeadzone = deadzone;
+    }
+    
+    public DriveStraightActionDistance(double distance, double maxSpeed, int requiredErrorCounts) {
+    	mDistanceSetPoint = distance;
+    	mLinearMaxSpeed = maxSpeed;
+    	mRequiredErrorCounts = requiredErrorCounts;
     }
     
     @Override
@@ -127,27 +111,14 @@ public class DriveStraightActionDistance implements Action {
 		}
 	}
 	
-	private boolean isGyroOnTarget() {
-		if (Math.abs(calcGyroError()) < mRotationalDeadzone){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 	private boolean isEncoderOnTarget() {
-		if( Math.abs(calcEncoderError()) < mLinearDeadzone)
-		{
-			//Increase the number counts within the error
-			errorCounts++;
+		if(Math.abs(calcEncoderError()) < mLinearDeadzone) {
+			mErrorCounts++;
 		} else {
-			//We're not there yet, so reset the counter
-			errorCounts = 0;
+			mErrorCounts = 0;
 		}
-		//If we've been within the error for long enough...
-		if(errorCounts >= requiredErrorCounts)
-		{
-			//We're done!
+		
+		if(mErrorCounts >= mRequiredErrorCounts) {
 			return true;
 		} else {
 			return false;

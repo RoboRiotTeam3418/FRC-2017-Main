@@ -6,43 +6,35 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 public class TurnActionAngle implements Action {
 
+	private Drivetrain mDrivetrain = Drivetrain.getInstance();
+	private ADXRS450_Gyro mGyro = HardwareMap.getInstance().mGyro;
+	
 	private double mAngleSetpoint;
 	private double mAngleCorrectionSpeed;
-	private int errorCounts;
-	private final int requiredErrorCounts;
 	
-	private final double mRotationalMaxSpeed;
-	private final double mRotationalMinSpeed;
-	private final double mRotationalDeadzone;
-
-	private Drivetrain mDrivetrain;
-	private ADXRS450_Gyro mGyro;
+	private int mErrorCounts = 0;
+	private int mRequiredErrorCounts = 50;
+	
+	private double mRotationalMaxSpeed = .65;
+	private double mRotationalMinSpeed = .35;
+	private double mRotationalDeadzone = 1.5;
 	
     public TurnActionAngle(double angle) {
-    	mDrivetrain = Drivetrain.getInstance();
-    	mGyro = HardwareMap.getInstance().mGyro;
         mAngleSetpoint = mGyro.getAngle() + angle;
-        
-        /*
-        mRotationalMaxSpeed = .75;
-    	mRotationalMinSpeed = .4;
-    	mRotationalDeadzone = 1.75;
-    	*/
-        
-        mRotationalMaxSpeed = .65;
-    	mRotationalMinSpeed = .35;
-    	mRotationalDeadzone = 1.5;
-    	
-    	errorCounts = 0;
-    	requiredErrorCounts = 50;
+    }
+    
+    public TurnActionAngle(double angle, double rotationalDeadzone) {
+        mAngleSetpoint = mGyro.getAngle() + angle;
+        mRotationalDeadzone = rotationalDeadzone;
+    }
+    
+    public TurnActionAngle(double angle, int requiredErrorCounts) {
+        mAngleSetpoint = mGyro.getAngle() + angle;
+        mRequiredErrorCounts = requiredErrorCounts;
     }
     
     public TurnActionAngle(double angle, double RotationalMaxSpeed, double RotationalMinSpeed, double RotationalDeadzone) {
-    	mDrivetrain = Drivetrain.getInstance();
-    	mGyro = HardwareMap.getInstance().mGyro;
         mAngleSetpoint = mGyro.getAngle() + angle;
-        errorCounts = 0;
-    	requiredErrorCounts = 50;
         
         mRotationalMaxSpeed = RotationalMaxSpeed;
     	mRotationalMinSpeed = RotationalMinSpeed;
@@ -72,7 +64,7 @@ public class TurnActionAngle implements Action {
 	@Override
 	public void done() {
 		mDrivetrain.setTankDriveSpeed(0, 0);
-		System.out.println("finished with turn action");
+		System.out.println("finished with turn (angle) action");
 	}
 	
 	private double calcGyroError() {
@@ -95,18 +87,12 @@ public class TurnActionAngle implements Action {
 	}
 	
 	private boolean isGyroOnTarget() {
-		if( Math.abs(calcGyroError()) < mRotationalDeadzone)
-		{
-			//Increase the number counts within the error
-			errorCounts++;
+		if( Math.abs(calcGyroError()) < mRotationalDeadzone) {
+			mErrorCounts++;
 		} else {
-			//We're not there yet, so reset the counter
-			errorCounts = 0;
+			mErrorCounts = 0;
 		}
-		//If we've been within the error for long enough...
-		if(errorCounts >= requiredErrorCounts)
-		{
-			//We're done!
+		if(mErrorCounts >= mRequiredErrorCounts) {
 			return true;
 		} else {
 			return false;
