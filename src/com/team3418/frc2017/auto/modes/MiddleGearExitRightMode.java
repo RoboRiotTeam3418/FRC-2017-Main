@@ -7,8 +7,6 @@ public class MiddleGearExitRightMode extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		// TODO Auto-generated method stub
 		
 	}
-
 }

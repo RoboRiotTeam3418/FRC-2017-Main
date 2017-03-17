@@ -1,15 +1,11 @@
 package com.team3418.frc2017.auto.actions;
 
-import com.team3418.frc2017.HardwareMap;
 import com.team3418.frc2017.subsystems.Drivetrain;
-
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Timer;
 
 public class TurnActionTime implements Action {
 	
 	private Drivetrain mDrivetrain = Drivetrain.getInstance();
-	private ADXRS450_Gyro mGyro = HardwareMap.getInstance().mGyro;
 	
 	private boolean mDirection;//right is true left is false
 	private double mRotationalSpeed = .65;

@@ -11,10 +11,9 @@ public class RightGearStayMode extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		runAction(new DriveStraightActionDistance(-100));
+		runAction(new DriveStraightActionDistance(-90));
 		runAction(new TurnActionAngle(-50));
 		runAction(new CameraAlign());
-		runAction(new DriveStraightActionTime(2, false));		
+		runAction(new DriveStraightActionTime(2, false));
 	}
-
 }

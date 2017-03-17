@@ -25,7 +25,7 @@ public class CameraAlign implements Action{
 	private int errorCounts = 0;
 	private int requiredErrorCounts = 50;
 	
-	private double mAngleSetpoint = 0;
+	private double mAngleSetpoint;
 	private double mAngleCorrectionSpeed = 0;
 	
 	private enum state {
@@ -38,7 +38,7 @@ public class CameraAlign implements Action{
 
 	@Override
 	public void start() {
-		
+		mGyro.reset();
 	}
 
 	@Override
@@ -48,11 +48,11 @@ public class CameraAlign implements Action{
 			mAngleSetpoint = calcDegreesToPixel();
 			mState = state.CORRECT_FIRST_ERROR;
 			System.out.println("camera error correction completed");
+			System.out.println("current angle is " + mGyro.getAngle() + " current setpoint is " + mAngleSetpoint);
 			break;
 		case CORRECT_FIRST_ERROR:
 			calcGyroSpeed();
 			mDrivetrain.setTankDriveSpeed(mAngleCorrectionSpeed, -mAngleCorrectionSpeed);
-			System.out.println(mAngleCorrectionSpeed);
 			if (isGyroOnTarget()) {
 				finished = true;
 			}
@@ -74,7 +74,8 @@ public class CameraAlign implements Action{
 	}
 	
 	private double calcCameraError() {//in pixels
-		return mMinionVision.getCombinedTargetX()-160;
+		System.out.println(mMinionVision.getCombinedTargetX() - 160);
+		return mMinionVision.getCombinedTargetX() - 160;
 	}
 	
 	private double calcDegreesToPixel() {//returns degrees to turn for target correction

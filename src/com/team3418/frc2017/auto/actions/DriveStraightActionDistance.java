@@ -18,7 +18,7 @@ public class DriveStraightActionDistance implements Action {
 	private int mErrorCounts = 0;
 	private int mRequiredErrorCounts = 50;
 	
-	private double mLinearMaxSpeed = 1;
+	private double mLinearMaxSpeed = .7;
 	private double mLinearMinSpeed = .28;
 	private double mLinearDeadzone = 1;
 	private double mRotationalMaxSpeed = .5;
