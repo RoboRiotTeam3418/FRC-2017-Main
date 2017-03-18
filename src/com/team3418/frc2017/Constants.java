@@ -23,7 +23,7 @@ public class Constants {
 	//-----------------------------//
     
     //Intake Roller
-    public static double kRollerIntakeSpeed = .8;
+    public static double kRollerIntakeSpeed = .75;
 	public static double kRollerReverseSpeed = -1;
 	
 	//Agitator
