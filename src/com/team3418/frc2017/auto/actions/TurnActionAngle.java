@@ -50,7 +50,8 @@ public class TurnActionAngle implements Action {
 	public void update() {
     	calcGyroSpeed();
 		mDrivetrain.setTankDriveSpeed(mAngleCorrectionSpeed, -mAngleCorrectionSpeed);
-		System.out.println("error = " + calcGyroError() + " deadzone is " + mRotationalDeadzone + " correction speed = " + mAngleCorrectionSpeed );
+		//System.out.println("error = " + calcGyroError() + " deadzone is " + mRotationalDeadzone + " correction speed = " + mAngleCorrectionSpeed );
+		System.out.println(mGyro.getAngle());
 	}
     
     @Override
@@ -72,7 +73,7 @@ public class TurnActionAngle implements Action {
 	}
 	
 	private void calcGyroSpeed() {
-		mAngleCorrectionSpeed = calcGyroError() * .2;
+		mAngleCorrectionSpeed = calcGyroError() * .175;
 		if (mAngleCorrectionSpeed < mRotationalMinSpeed && mAngleCorrectionSpeed > 0 ) {
 			mAngleCorrectionSpeed = mRotationalMinSpeed;
 		} else if (mAngleCorrectionSpeed > -mRotationalMinSpeed && mAngleCorrectionSpeed < 0 ) {

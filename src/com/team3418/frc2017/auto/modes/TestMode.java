@@ -6,6 +6,8 @@ import com.team3418.frc2017.auto.actions.CameraAlign;
 import com.team3418.frc2017.auto.actions.CameraAlignOld;
 import com.team3418.frc2017.auto.actions.DriveStraightActionDistance;
 import com.team3418.frc2017.auto.actions.TurnActionAngle;
+import com.team3418.frc2017.auto.actions.TurnActionTime;
+import com.team3418.frc2017.auto.actions.WaitAction;
 
 public class TestMode extends AutoModeBase {
 
@@ -17,10 +19,27 @@ public class TestMode extends AutoModeBase {
 		runAction(new DriveStraightActionDistance(-40));
 		runAction(new DriveStraightActionDistance(40));
 		 */
-		
-		runAction(new CameraAlignOld());
-		runAction(new TurnActionAngle(10));
+		/*
 		runAction(new CameraAlign());
+		//runAction(new TurnActionAngle(10));
+		runAction(new CameraAlign());
+		*/
+		
+		/*
+		runAction(new TurnActionAngle(90));
+		runAction(new WaitAction(2));
+		runAction(new TurnActionAngle(90));
+		runAction(new WaitAction(2));
+		runAction(new TurnActionAngle(360));
+		*/
+		/*
+		runAction(new TurnActionTime(1, -1, .8));
+		runAction(new WaitAction(2));
+		runAction(new TurnActionTime(1, 1, .8));
+		*/
+		
+		runAction(new CameraAlign());
+		
+		
 	}
-
 }

@@ -14,5 +14,4 @@ public class MiddleGearStayMode extends AutoModeBase {
 		runAction(new CameraAlign());
 		runAction(new DriveStraightActionTime(1, false));
 	}
-
 }

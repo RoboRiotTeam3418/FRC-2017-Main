@@ -7,18 +7,18 @@ public class TurnActionTime implements Action {
 	
 	private Drivetrain mDrivetrain = Drivetrain.getInstance();
 	
-	private boolean mDirection;//right is true left is false
+	private double mDirection;//right is true left is false
 	private double mRotationalSpeed = .65;
 	private double mTimeToWait;
 	private double mStartTime;
 	private double mCurrentTime;
 	
-	public TurnActionTime(double time, boolean direction) {
+	public TurnActionTime(double time, double direction) {
 		mTimeToWait = time;
 		mDirection = direction;
 	}
 	
-	public TurnActionTime(double time, boolean direction, double rotationalSpeed) {
+	public TurnActionTime(double time, double direction, double rotationalSpeed) {
 		mTimeToWait = time;
 		mDirection = direction;
 		mRotationalSpeed = rotationalSpeed;
@@ -27,16 +27,13 @@ public class TurnActionTime implements Action {
 	@Override
 	public void start() {
 		mDrivetrain.lowGear();
+		mStartTime = Timer.getFPGATimestamp();
 	}
 
 	@Override
 	public void update() {
 		mCurrentTime = Timer.getFPGATimestamp();
-    	if (mDirection) {
-    		mDrivetrain.setTankDriveSpeed(mRotationalSpeed, -mRotationalSpeed);
-    	} else {
-    		mDrivetrain.setTankDriveSpeed(-mRotationalSpeed, mRotationalSpeed);
-    	}
+    	mDrivetrain.setTankDriveSpeed(mRotationalSpeed * mDirection, -mRotationalSpeed * mDirection);
 	}
 
 	@Override

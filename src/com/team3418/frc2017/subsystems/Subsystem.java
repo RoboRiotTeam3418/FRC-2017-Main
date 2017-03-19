@@ -2,9 +2,9 @@ package com.team3418.frc2017.subsystems;
 
 abstract public class Subsystem {
 	
-	abstract void updateSubsystem();
+	abstract public void updateSubsystem();
 	
-	abstract void outputToSmartDashboard();
+	abstract public void outputToSmartDashboard();
 	
-	abstract void stop();
+	abstract public void stop();
 }

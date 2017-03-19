@@ -48,6 +48,7 @@ public class DriveStraightActionDistance implements Action {
     @Override
 	public void start() {
 		mDrivetrain.lowGear();
+		mDrivetrain.resetEncoders();
 	}
     
     @Override

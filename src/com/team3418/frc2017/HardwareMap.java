@@ -40,7 +40,6 @@ public class HardwareMap {
 			mCompressor = new Compressor(0);
 			
 			mGyro = new ADXRS450_Gyro();
-			mGyro.reset();
 			mGyro.calibrate();
 		}
 		catch(Exception e)
