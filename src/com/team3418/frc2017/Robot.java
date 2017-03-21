@@ -2,12 +2,10 @@ package com.team3418.frc2017;
 
 
 import com.team3418.frc2017.auto.AutoExecuter;
-import com.team3418.frc2017.auto.modes.LeftGearExitLeftMode;
 import com.team3418.frc2017.plugins.MinionVision;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
-import com.team3418.frc2017.subsystems.GyroSubsystem;
 import com.team3418.frc2017.subsystems.Intake;
 import com.team3418.frc2017.subsystems.Shooter;
 
@@ -27,7 +25,6 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
-	GyroSubsystem mGyroSubsystem;
 	
 	AutoExecuter mAutoExecuter = null;
 	
@@ -37,7 +34,6 @@ public class Robot extends IterativeRobot {
 		mDrivetrain.updateSubsystem();
 		mIntake.updateSubsystem();
 		mShooter.updateSubsystem();
-		mGyroSubsystem.updateSubsystem();
 		
 	}
 	
@@ -49,7 +45,6 @@ public class Robot extends IterativeRobot {
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
-		mGyroSubsystem.stop();
 	}
 	
 	@Override
@@ -67,7 +62,6 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
-		mGyroSubsystem = GyroSubsystem.getInstance();
 		
 		mSmartDashboardInteractions.initWithDefaults();
 		
