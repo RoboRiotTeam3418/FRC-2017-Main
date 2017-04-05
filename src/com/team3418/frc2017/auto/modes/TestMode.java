@@ -2,6 +2,10 @@ package com.team3418.frc2017.auto.modes;
 
 import com.team3418.frc2017.auto.AutoModeBase;
 import com.team3418.frc2017.auto.AutoModeEndedException;
+<<<<<<< HEAD
+=======
+import com.team3418.frc2017.auto.actions.CameraAlign;
+>>>>>>> origin/master
 
 public class TestMode extends AutoModeBase {
 

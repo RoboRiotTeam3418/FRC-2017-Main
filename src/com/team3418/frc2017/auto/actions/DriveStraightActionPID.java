@@ -55,4 +55,8 @@ public class DriveStraightActionPID implements Action, PIDOutput {
 	public void pidWrite(double output) {
 		mPidRate = output;
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
