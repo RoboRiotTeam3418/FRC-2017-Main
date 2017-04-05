@@ -31,7 +31,6 @@ public class Climber extends Subsystem {
     
 	@Override
 	public void updateSubsystem() {
-		outputToSmartDashboard();
 		
 		switch(mClimberState){
 		case FORWARD:

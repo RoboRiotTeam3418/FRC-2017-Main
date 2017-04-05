@@ -52,29 +52,13 @@ public class ControlBoard {
     	return mDriverStick.getRawButton(5);
     }
     
-    /*
-    public boolean getDriverClimberHoldButton(){
-    	return mDriverStick.getRawAxis(3) > .1;
-    }
-    */
-    
-    public boolean getDriveCameraSwitcherButton(){
-    	return mDriverStick.getRawButton(1);
+    public boolean getDriverRightTrigger() {
+    	return mDriverStick.getRawAxis(axis) > .1;
     }
     
-    public double getDriverRightTrigger(){
-    	return mDriverStick.getRawAxis(3);
+    public boolean getDriverLeftTrigger() {
+    	return mDriverStick.getRawAxis(axis) > .1;
     }
-    
-    /*
-    public boolean getDriverIncreaseSpeed(){
-    	return mDriverStick.getRawButton(4);
-    }
-    
-    public boolean getDriverDecreaseSpeed(){
-    	return mDriverStick.getRawButton(1);
-    }
-    */
     //
     
     //SECONDARY CONTROLS
