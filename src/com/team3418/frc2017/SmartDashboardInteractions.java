@@ -1,13 +1,8 @@
 package com.team3418.frc2017;
 
 import com.team3418.frc2017.auto.AutoModeBase;
-import com.team3418.frc2017.auto.modes.LeftGearExitLeftMode;
-import com.team3418.frc2017.auto.modes.LeftGearExitRightMode;
 import com.team3418.frc2017.auto.modes.LeftGearStayMode;
-import com.team3418.frc2017.auto.modes.MiddleGearExitLeftMode;
-import com.team3418.frc2017.auto.modes.MiddleGearExitRightMode;
 import com.team3418.frc2017.auto.modes.MiddleGearStayMode;
-import com.team3418.frc2017.auto.modes.RightGearExitRightMode;
 import com.team3418.frc2017.auto.modes.RightGearStayMode;
 import com.team3418.frc2017.auto.modes.StandStillMode;
 import com.team3418.frc2017.auto.modes.TestMode;
@@ -30,14 +25,8 @@ public class SmartDashboardInteractions {
 	public void initWithDefaults() {
 		mAutoChooser = new SendableChooser<AutonOption>();
 		
-        mAutoChooser.addObject(AutonOption.MIDDLE_GEAR_EXIT_LEFT.name, AutonOption.MIDDLE_GEAR_EXIT_LEFT);
-        mAutoChooser.addObject(AutonOption.MIDDLE_GEAR_EXIT_RIGHT.name, AutonOption.MIDDLE_GEAR_EXIT_RIGHT);
         mAutoChooser.addObject(AutonOption.MIDDLE_GEAR_STAY.name, AutonOption.MIDDLE_GEAR_STAY);
-        //mAutoChooser.addObject(AutonOption.LEFT_GEAR_EXIT_LEFT.name, AutonOption.LEFT_GEAR_EXIT_LEFT);
-        //mAutoChooser.addObject(AutonOption.LEFT_GEAR_EXIT_RIGHT.name, AutonOption.LEFT_GEAR_EXIT_RIGHT);
         mAutoChooser.addObject(AutonOption.LEFT_GEAR_STAY.name, AutonOption.LEFT_GEAR_STAY);
-        //mAutoChooser.addObject(AutonOption.RIGHT_GEAR_EXIT_LEFT.name, AutonOption.RIGHT_GEAR_EXIT_LEFT);
-        //mAutoChooser.addObject(AutonOption.RIGHT_GEAR_EXIT_RIGHT.name, AutonOption.RIGHT_GEAR_EXIT_RIGHT);
         mAutoChooser.addObject(AutonOption.RIGHT_GEAR_STAY.name, AutonOption.RIGHT_GEAR_STAY);
         mAutoChooser.addObject(AutonOption.STAND_STILL.name, AutonOption.STAND_STILL);
         mAutoChooser.addObject(AutonOption.TEST.name, AutonOption.TEST);
@@ -60,14 +49,8 @@ public class SmartDashboardInteractions {
     
     //enum to hold all possible auto modes
     enum AutonOption {
-        MIDDLE_GEAR_EXIT_LEFT("middle gear exit left", new MiddleGearExitLeftMode()), //
-        MIDDLE_GEAR_EXIT_RIGHT("middle gear exit right", new MiddleGearExitRightMode()), //
         MIDDLE_GEAR_STAY("middle gear stay", new MiddleGearStayMode()), //
-        LEFT_GEAR_EXIT_LEFT("left gear exit left", new LeftGearExitLeftMode()), //
-        LEFT_GEAR_EXIT_RIGHT("left gear exit right", new LeftGearExitRightMode()), //
         LEFT_GEAR_STAY("left gear stay", new LeftGearStayMode()), //
-        RIGHT_GEAR_EXIT_LEFT("right gear exit left", new RightGearExitRightMode()), //
-        RIGHT_GEAR_EXIT_RIGHT("right gear exit right", new RightGearExitRightMode()), //
         RIGHT_GEAR_STAY("right gear stay", new RightGearStayMode()), //
         STAND_STILL("stand still", new StandStillMode()),//
     	TEST("test (do not use at comp)", new TestMode()); //
@@ -83,25 +66,12 @@ public class SmartDashboardInteractions {
         }
     }
     
-    
     //method to create auto mode based on chosen mode
     private AutoModeBase createAutoMode(AutonOption autonOption) {
         switch (autonOption) {
-        case MIDDLE_GEAR_EXIT_LEFT:
-            return autonOption.autoMode;
-        case MIDDLE_GEAR_EXIT_RIGHT:
-            return autonOption.autoMode;
         case MIDDLE_GEAR_STAY:
             return autonOption.autoMode;
-        case LEFT_GEAR_EXIT_LEFT:
-            return autonOption.autoMode;
-        case LEFT_GEAR_EXIT_RIGHT:
-            return autonOption.autoMode;
         case LEFT_GEAR_STAY:
-            return autonOption.autoMode;
-        case RIGHT_GEAR_EXIT_LEFT:
-            return autonOption.autoMode;
-        case RIGHT_GEAR_EXIT_RIGHT:
             return autonOption.autoMode;
         case RIGHT_GEAR_STAY:
             return autonOption.autoMode;

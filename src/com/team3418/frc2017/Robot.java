@@ -2,15 +2,13 @@ package com.team3418.frc2017;
 
 
 import com.team3418.frc2017.auto.AutoExecuter;
-import com.team3418.frc2017.auto.modes.LeftGearExitLeftMode;
 import com.team3418.frc2017.plugins.MinionVision;
 import com.team3418.frc2017.subsystems.Agitator;
 import com.team3418.frc2017.subsystems.Climber;
 import com.team3418.frc2017.subsystems.Drivetrain;
-import com.team3418.frc2017.subsystems.GyroSubsystem;
 import com.team3418.frc2017.subsystems.Intake;
+import com.team3418.frc2017.subsystems.MrGush;
 import com.team3418.frc2017.subsystems.Shooter;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -27,7 +25,7 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
-	GyroSubsystem mGyroSubsystem;
+	MrGush mMrGush;
 	
 	AutoExecuter mAutoExecuter = null;
 	
@@ -37,11 +35,11 @@ public class Robot extends IterativeRobot {
 		mDrivetrain.updateSubsystem();
 		mIntake.updateSubsystem();
 		mShooter.updateSubsystem();
-		mGyroSubsystem.updateSubsystem();
-		
+		mMrGush.updateSubsystem();
 	}
 	
 	public void stopAllSubsystems(){
+		
 		mAgitator.stop();
 		mClimber.stop();
 		mDrivetrain.stop();
@@ -49,12 +47,11 @@ public class Robot extends IterativeRobot {
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
-		mGyroSubsystem.stop();
+		mMrGush.stop();
 	}
 	
 	@Override
 	public void robotInit() {
-		
 		
 		mHardwareMap = HardwareMap.getInstance();
 		mControlBoard = ControlBoard.getInstance();
@@ -67,7 +64,7 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
-		mGyroSubsystem = GyroSubsystem.getInstance();
+		mMrGush = MrGush.getInstance();
 		
 		mSmartDashboardInteractions.initWithDefaults();
 		
@@ -84,7 +81,6 @@ public class Robot extends IterativeRobot {
         
         mAutoExecuter = new AutoExecuter();
         mAutoExecuter.setAutoRoutine(mSmartDashboardInteractions.getSelectedAutonMode());
-        //mAutoExecuter.setAutoRoutine(new LeftGearExitLeftMode());
         mAutoExecuter.start();
 		
 		stopAllSubsystems();
@@ -108,6 +104,8 @@ public class Robot extends IterativeRobot {
         }
         mAutoExecuter = null;
         
+		//mMinionVision.startVision();
+        
         //mMinionVision.stopVision();
         mDrivetrain.resetEncoders();
 		
@@ -128,7 +126,7 @@ public class Robot extends IterativeRobot {
         }
         mAutoExecuter = null;
         
-        //mMinionVision.startVision();
+        mMinionVision.stopVision();
         
 		stopAllSubsystems();
 		mHardwareMap.mGyro.reset();
@@ -219,27 +217,18 @@ public class Robot extends IterativeRobot {
 		}
 		//---------------------------------------------------
 		
-		/*
-		System.out.println(mGyroSubsystem.getAngle());
-		System.out.println("ADXR_D = " + mHardwareMap.mGyro.getAngle());
-		*/
-		//System.out.println(Math.random());
+		
+		
+		//MrGushy
+		
+		if (mControlBoard.getDriverLeftTrigger() || mControlBoard.getDriverRightTrigger()) {
+			mMrGush.Extend();
+		} else {
+			mMrGush.Retract();
+		}
+		
 		
 		updateAllSubsystems();
-		
-		/*
-		if (mControlBoard.getDriverRightTrigger() > .2){
-			mIntake.setRollerSpeed(mControlBoard.getDriverRightTrigger());
-		}
-		
-		if (mControlBoard.getDriverIncreaseSpeed()) {
-			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()+1));
-			System.out.println(mShooter.getTargetShooterRpm());
-		} else if (mControlBoard.getDriverDecreaseSpeed()) {
-			mShooter.setTargetShooterRpm((mShooter.getTargetShooterRpm()-1));
-			System.out.println(mShooter.getTargetShooterRpm());
-		}
-		*/
 		
 		
 	}

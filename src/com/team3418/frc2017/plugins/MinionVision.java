@@ -34,7 +34,7 @@ public class MinionVision {
 		if(visionThread == null)
 		{
 			System.out.println("visionthread = null (creating new thread)");
-			visionThread = new VisionThread(30);
+			visionThread = new VisionThread(20);
 		}
 		if (visionThread != null){
 			System.out.println("starting vision");
@@ -48,6 +48,7 @@ public class MinionVision {
 		{	
 			System.out.println("stopping vision");
 			visionThread.interrupt();
+			visionThread = null;
 		}
 	}
 	
@@ -141,6 +142,8 @@ class VisionThread extends Thread {
 	//The time (in milliseconds) that the vision thread should wait
 	int threadWait;
 	
+	int runningcount;
+	
 	
 	//These are variables returned by the vision system
 	//Since this class is being executed on a separate thread, they have to be volatile to make sure no conflicts arise when another script tries to access them
@@ -179,6 +182,8 @@ class VisionThread extends Thread {
 		targetsFound = 0;
 		
 		threadWait = Math.max((int)(Math.round(1.0 / framerate)) * 1000, 1);
+		
+		runningcount = 0;
 	}
 
 	

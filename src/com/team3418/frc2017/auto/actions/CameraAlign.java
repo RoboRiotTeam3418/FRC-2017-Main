@@ -13,8 +13,8 @@ public class CameraAlign implements Action{
 	private Drivetrain mDrivetrain = Drivetrain.getInstance();
 	
 	// 10 degrees per 88 pixels at 3' from target (yes it's not perfect but it works)
-	private final double mDegrees = 10;
-	private final double mPixels = 88;
+	private final double mCameraFovDegrees = 60;
+	private final double mCameraWidthPixels = 320;
 	
 	private state mState = state.CALC_FIRST_ERROR;
 	private boolean finished = false;
@@ -77,7 +77,7 @@ public class CameraAlign implements Action{
 	
 	
 	private void calcDegreesToPixel() {//returns degrees to turn for target correction
-		mAngleSetpoint = (mDegrees / mPixels) * (mMinionVision.getCombinedTargetX() - 160);
+		mAngleSetpoint = (mMinionVision.getCombinedTargetX() - 160) * (mCameraFovDegrees / mCameraWidthPixels);
 	}
 	
 	private double calcGyroError() {//calculates gyro error relative to setpoint

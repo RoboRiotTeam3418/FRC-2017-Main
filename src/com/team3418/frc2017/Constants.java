@@ -25,20 +25,22 @@ public class Constants {
     //Intake Roller
     public static double kRollerIntakeSpeed = .75;
 	public static double kRollerReverseSpeed = -1;
+	//instake speed is negative for comp bot and positive for practice bot
 	
 	//Agitator
-    public static double kAgitatorFeedSpeed = -.75;
+    public static double kAgitatorFeedSpeed = -.50;
     public static double kAgitatorReverseSpeed = .75;
     
     //Feeder Wheel
-	public static double kFeederSpeed = .75;
+	public static double kFeederSpeed = -.55;
+	//feeder speed is negative for comp bot and positive for practice bot
     
 	//Climber
 	public static double kClimberReverseSpeed = -.5;
 	public static double kClimberHoldSpeed = .40;
 	
 	//shooter
-	public static double kTargetShooterRpm = 1550;
+	public static double kTargetShooterRpm = 1785;
 	
 	//-------------//
 	//-Autonomous-//
@@ -78,4 +80,5 @@ public class Constants {
 	//SOLENOIDS (0-64)
 	public static int kLeftShifterSolenoidId = 0;
 	public static int kRightShifterSolenoidId = 1;
+	public static int kMrGushySolenoid = 2;
 }
