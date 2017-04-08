@@ -30,6 +30,7 @@ public class SmartDashboardInteractions {
         mAutoChooser.addObject(AutonOption.RIGHT_GEAR_STAY.name, AutonOption.RIGHT_GEAR_STAY);
         mAutoChooser.addObject(AutonOption.STAND_STILL.name, AutonOption.STAND_STILL);
         mAutoChooser.addObject(AutonOption.TEST.name, AutonOption.TEST);
+        mAutoChooser.addDefault("Stand_Still", AutonOption.STAND_STILL);
         
         SmartDashboard.putData("Auto Mode Chooser", mAutoChooser);
     }

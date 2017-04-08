@@ -12,10 +12,7 @@ public class CameraAlign implements Action{
 	private MinionVision mMinionVision = MinionVision.getInstance();
 	private Drivetrain mDrivetrain = Drivetrain.getInstance();
 	
-<<<<<<< HEAD
 	// 10 degrees per 88 pixels at 3' from target (yes it's not perfect but it works)
-=======
->>>>>>> origin/master
 	private final double mCameraFovDegrees = 60;
 	private final double mCameraWidthPixels = 320;
 	

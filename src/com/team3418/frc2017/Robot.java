@@ -25,10 +25,7 @@ public class Robot extends IterativeRobot {
 	Drivetrain mDrivetrain;
 	Intake mIntake;
 	Shooter mShooter;
-<<<<<<< HEAD
 	MrGush mMrGush;
-=======
->>>>>>> origin/master
 	
 	AutoExecuter mAutoExecuter = null;
 	
@@ -38,11 +35,7 @@ public class Robot extends IterativeRobot {
 		mDrivetrain.updateSubsystem();
 		mIntake.updateSubsystem();
 		mShooter.updateSubsystem();
-<<<<<<< HEAD
 		mMrGush.updateSubsystem();
-=======
-		
->>>>>>> origin/master
 	}
 	
 	public void stopAllSubsystems(){
@@ -54,10 +47,7 @@ public class Robot extends IterativeRobot {
 		mIntake.stop();
 		mShooter.stopFeeder();
 		mShooter.stop();
-<<<<<<< HEAD
 		mMrGush.stop();
-=======
->>>>>>> origin/master
 	}
 	
 	@Override
@@ -74,10 +64,7 @@ public class Robot extends IterativeRobot {
 		mDrivetrain = Drivetrain.getInstance();
 		mIntake = Intake.getInstance();
 		mShooter = Shooter.getInstance();
-<<<<<<< HEAD
 		mMrGush = MrGush.getInstance();
-=======
->>>>>>> origin/master
 		
 		mSmartDashboardInteractions.initWithDefaults();
 		
@@ -236,6 +223,7 @@ public class Robot extends IterativeRobot {
 		
 		if (mControlBoard.getDriverLeftTrigger() || mControlBoard.getDriverRightTrigger()) {
 			mMrGush.Extend();
+			System.out.println("extend my gushy");
 		} else {
 			mMrGush.Retract();
 		}

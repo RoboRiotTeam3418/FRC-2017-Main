@@ -14,6 +14,7 @@ public class MrGush extends Subsystem {
     
 	public MrGush() {
 		MrGushySolenoid = new Solenoid(Constants.kMrGushySolenoid);
+		System.out.println("Mr Gushy has been initialized :D");
 	}
 
 	private Solenoid MrGushySolenoid;

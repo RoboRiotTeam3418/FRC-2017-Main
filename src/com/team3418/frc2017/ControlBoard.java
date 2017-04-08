@@ -53,11 +53,11 @@ public class ControlBoard {
     }
     
     public boolean getDriverRightTrigger() {
-    	return mDriverStick.getRawAxis(axis) > .1;
+    	return mDriverStick.getRawAxis(3) > .1;
     }
     
     public boolean getDriverLeftTrigger() {
-    	return mDriverStick.getRawAxis(axis) > .1;
+    	return mDriverStick.getRawAxis(2) > .1;
     }
     //
     
