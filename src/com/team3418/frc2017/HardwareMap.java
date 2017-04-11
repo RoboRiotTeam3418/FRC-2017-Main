@@ -36,9 +36,7 @@ public class HardwareMap {
 	    	mRightShifterSolenoid = new Solenoid(Constants.kRightShifterSolenoidId);
 	    	mIntakeTalon = new VictorSP(Constants.kIntakeRollerId);
 	    	mFeederTalon = new VictorSP(Constants.kFeederId);
-	    	
 			mCompressor = new Compressor(0);
-			
 			mGyro = new ADXRS450_Gyro();
 			mGyro.calibrate();
 		}

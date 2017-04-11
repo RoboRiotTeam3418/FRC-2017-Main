@@ -35,7 +35,7 @@ public class Shooter extends Subsystem {
 		mFeederVictor.setInverted(true);
 		
 		//Left Talon Motor Controller
-		mLeftShooterTalon = new CANTalon(Constants.kLeftShooterMotorId);			
+		mLeftShooterTalon = new CANTalon(Constants.kLeftShooterMotorId);		
 		mLeftShooterTalon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		mLeftShooterTalon.changeControlMode(TalonControlMode.PercentVbus);
 		mLeftShooterTalon.set(0);
@@ -51,7 +51,7 @@ public class Shooter extends Subsystem {
 		
 		mLeftShooterTalon.configNominalOutputVoltage(+0.0f, -0.0f);
 		mLeftShooterTalon.configPeakOutputVoltage(+12.0f, -0.0f);
-		mLeftShooterTalon.setAllowableClosedLoopErr(Constants.kFlywheelAllowableError);		
+		mLeftShooterTalon.setAllowableClosedLoopErr(Constants.kFlywheelAllowableError);	
 		//
 		System.out.println("leftshooterdoneinit");
 		
@@ -268,8 +268,4 @@ public class Shooter extends Subsystem {
         SmartDashboard.putString("ShooterReady_State", mShooterReadyState.toString());
         SmartDashboard.putString("Feeder_State", mFeederState.toString());
 	}
-    
-    
-    
-    
 }

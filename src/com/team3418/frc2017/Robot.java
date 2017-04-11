@@ -1,6 +1,5 @@
 package com.team3418.frc2017;
 
-
 import com.team3418.frc2017.auto.AutoExecuter;
 import com.team3418.frc2017.plugins.MinionVision;
 import com.team3418.frc2017.subsystems.Agitator;
@@ -78,7 +77,6 @@ public class Robot extends IterativeRobot {
         }
         mAutoExecuter = null;
         
-        
         mAutoExecuter = new AutoExecuter();
         mAutoExecuter.setAutoRoutine(mSmartDashboardInteractions.getSelectedAutonMode());
         mAutoExecuter.start();
@@ -93,7 +91,6 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		
 		updateAllSubsystems();
-		
 	}
 
 	@Override
@@ -114,7 +111,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	@Override
-	public void disabledPeriodic(){
+	public void disabledPeriodic() {
 		
 	}
 	
@@ -143,6 +140,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			mIntake.stop();
 		}
+		
 		
 		
 		

@@ -49,15 +49,13 @@ public class SmartDashboardInteractions {
     
     
     //enum to hold all possible auto modes
-    enum AutonOption {
+   private enum AutonOption {
         MIDDLE_GEAR_STAY("middle gear stay", new MiddleGearStayMode()), //
         LEFT_GEAR_STAY("left gear stay", new LeftGearStayMode()), //
         RIGHT_GEAR_STAY("right gear stay", new RightGearStayMode()), //
         STAND_STILL("stand still", new StandStillMode()),//
     	TEST("test (do not use at comp)", new TestMode()); //
         
-    	
-    	
         public final String name;
         public final AutoModeBase autoMode;
 
