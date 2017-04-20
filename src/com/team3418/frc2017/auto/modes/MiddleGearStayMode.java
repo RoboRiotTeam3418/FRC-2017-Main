@@ -15,7 +15,7 @@ public class MiddleGearStayMode extends AutoModeBase {
 	protected void routine() throws AutoModeEndedException {
 		runAction(new DriveStraightActionDistance(-60));
 		runAction(new CameraAlign());
-		runAction(new DriveStraightActionTime(4, false, .6));
+		runAction(new DriveStraightActionTime(2.5, false, .6));
 		runAction(new ExtendGearAction());
 		runAction(new WaitAction(1));
 		runAction(new DriveStraightActionTime(1, true));

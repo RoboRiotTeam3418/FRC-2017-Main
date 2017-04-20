@@ -105,6 +105,7 @@ public class Robot extends IterativeRobot {
         
         //mMinionVision.stopVision();
         mDrivetrain.resetEncoders();
+        mDrivetrain.highGear();
 		
 		stopAllSubsystems();
 		updateAllSubsystems();

@@ -49,6 +49,8 @@ public class Intake extends Subsystem
 			mIntakeRollerState = IntakeRollerState.STOP;
 			break;
 		}
+		
+		outputToSmartDashboard();
 	}	
 	
 	public void intake(){

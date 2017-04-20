@@ -4,6 +4,7 @@ import com.team3418.frc2017.auto.AutoModeBase;
 import com.team3418.frc2017.auto.modes.LeftGearStayMode;
 import com.team3418.frc2017.auto.modes.MiddleGearStayMode;
 import com.team3418.frc2017.auto.modes.RightGearStayMode;
+import com.team3418.frc2017.auto.modes.ShootMode;
 import com.team3418.frc2017.auto.modes.StandStillMode;
 import com.team3418.frc2017.auto.modes.TestMode;
 
@@ -28,6 +29,7 @@ public class SmartDashboardInteractions {
         mAutoChooser.addObject(AutonOption.MIDDLE_GEAR_STAY.name, AutonOption.MIDDLE_GEAR_STAY);
         mAutoChooser.addObject(AutonOption.LEFT_GEAR_STAY.name, AutonOption.LEFT_GEAR_STAY);
         mAutoChooser.addObject(AutonOption.RIGHT_GEAR_STAY.name, AutonOption.RIGHT_GEAR_STAY);
+        mAutoChooser.addObject(AutonOption.SHOOT.name, AutonOption.SHOOT);
         mAutoChooser.addObject(AutonOption.STAND_STILL.name, AutonOption.STAND_STILL);
         mAutoChooser.addObject(AutonOption.TEST.name, AutonOption.TEST);
         mAutoChooser.addDefault("Stand_Still", AutonOption.STAND_STILL);
@@ -53,6 +55,7 @@ public class SmartDashboardInteractions {
         MIDDLE_GEAR_STAY("middle gear stay", new MiddleGearStayMode()), //
         LEFT_GEAR_STAY("left gear stay", new LeftGearStayMode()), //
         RIGHT_GEAR_STAY("right gear stay", new RightGearStayMode()), //
+        SHOOT("shoot", new ShootMode()), //
         STAND_STILL("stand still", new StandStillMode()),//
     	TEST("test (do not use at comp)", new TestMode()); //
         
@@ -74,6 +77,8 @@ public class SmartDashboardInteractions {
             return autonOption.autoMode;
         case RIGHT_GEAR_STAY:
             return autonOption.autoMode;
+        case SHOOT:
+        	return autonOption.autoMode;
         case TEST:
             return autonOption.autoMode;
         case STAND_STILL:
